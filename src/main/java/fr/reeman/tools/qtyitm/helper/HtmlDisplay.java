@@ -23,15 +23,15 @@ import lombok.Builder;
 //License along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 @Builder
-public class HtmlDisplay {
+public class HtmlDisplay extends Display {
 
 	@Builder.Default private String zero = "0";
 	private String tableId;
 	private String tableClassName;
-	private boolean pretty;
+	private boolean multilines;
 
 	public String generate(Comparaison comparaison) {
-		SuperStringBuffer ssb = new SuperStringBuffer("<table%s%s>%S", tableId == null ? "" : " id='" + tableId + "'", tableClassName == null ? "" : " class='" + tableClassName + "'", pretty ? "\n" : "");
+		SuperStringBuffer ssb = new SuperStringBuffer("<table%s%s>%S", tableId == null ? "" : " id='" + tableId + "'", tableClassName == null ? "" : " class='" + tableClassName + "'", multilines ? "\n" : "");
 		
 		// Header
 		ssb.append("<tr class='qtyitm-header'><th></th>");
@@ -39,17 +39,18 @@ public class HtmlDisplay {
 		for (int i = 0; i < names.length; i++) {
 			ssb.append("<th>%s</th>", names[i]);
 		}
-		ssb.append("</tr>%s", pretty ? "\n" : "");
+		ssb.append("</tr>%s", multilines ? "\n" : "");
 		
 		// Body
 		Map<Item, Integer[]> occurences = comparaison.getItemsOccurences();
 		for (Item item : comparaison.getSortedItem()) {
 			Integer[] occ = occurences.get(item);
 			ssb.append("<tr class='%s'>", rowClassName(occ));
+			ssb.append("<td>%s</td>", item);
 			for (int i = 0; i < occ.length; i++) {
 				ssb.append("<td>%s</td>", occ[i] == null ? zero : occ[i].toString());
 			}
-			ssb.append("</tr>%s", pretty ? "\n" : "");
+			ssb.append("</tr>%s", multilines ? "\n" : "");
 		}
 
 		return ssb.toString("</table>");

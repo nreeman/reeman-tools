@@ -25,28 +25,12 @@ import lombok.Builder;
 //License along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 @Builder
-public class MarkdownDisplay {
+public class MarkdownDisplay extends Display {
 	
 	@Builder.Default private String zero = "0";
 	private boolean consoleColor;
-//	private final Charset charset = StandardCharsets.UTF_8;
-	
-//	public static void markdown(Comparaison comparaison, OutputStream outputStream, boolean consoleColor) throws IOException {
-//		markdown(comparaison, outputStream, "0", StandardCharsets.UTF_8, consoleColor);
-//	}
 
-//	public static void markdown(Comparaison comparaison, OutputStream outputStream, String zero, boolean consoleColor) throws IOException {
-//		markdown(comparaison, outputStream, zero, StandardCharsets.UTF_8, consoleColor);
-//	}
-
-//	public static void markdown(Comparaison comparaison, OutputStream outputStream, Charset charset, boolean consoleColor) throws IOException {
-//		markdown(comparaison, outputStream, "0", charset, consoleColor);
-//	}
-
-//	public static void markdown(Comparaison comparaison, OutputStream outputStream, String zero, Charset charset, boolean consoleColor) throws IOException {
-//		outputStream.write(markdown(comparaison, zero, consoleColor).getBytes(charset));
-//	}
-
+	@Override
 	public String generate(Comparaison comparaison) {
 		SuperStringBuffer ssb = new SuperStringBuffer();
 		Map<Item, Integer[]> occurences = comparaison.getItemsOccurences();

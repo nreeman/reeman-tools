@@ -44,7 +44,7 @@ public class DisplayTest {
 
 	@Test
 	public void html() {
-		HtmlDisplay htmlDisplay = HtmlDisplay.builder().tableClassName("CLASS").tableId("ID").pretty(true).zero("-").build();
+		HtmlDisplay htmlDisplay = HtmlDisplay.builder().tableClassName("CLASS").tableId("ID").multilines(true).zero("-").build();
 		System.out.println(htmlDisplay.generate(comparaison()));
 	}
 }
