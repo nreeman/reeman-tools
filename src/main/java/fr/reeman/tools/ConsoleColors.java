@@ -111,6 +111,26 @@ public enum ConsoleColors {
 		return val;
 	}
 	
+	public static String OK() {
+		return OK(GREEN);
+	}
+	
+	public static String OK(ConsoleColors color) {
+		return color + "OK" + RESET;
+	}
+	
+	public static String KO() {
+		return OK(RED);
+	}
+	
+	public static String KO(ConsoleColors color) {
+		return color + "KO" + RESET;
+	}
+	
+	public static String test(boolean bool) {
+		return bool ? OK() : KO();
+	}
+	
     public static void sample() {
     	sample(System.out);
     }
