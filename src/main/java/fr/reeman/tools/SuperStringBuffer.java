@@ -83,10 +83,18 @@ public class SuperStringBuffer {
 		return this;
 	}
 
-	public SuperStringBuffer removeLasts(int i) {
-		i = Math.min(i, stringBuffer.length());
-		if (i > 0) {
-			stringBuffer = new StringBuffer(stringBuffer.substring(0, stringBuffer.toString().length() - i));
+	/**
+	 * Supprime les <code>number</code> derniers caractères de la chaîne en construction.
+	 * 
+	 * Si <code>number</code> est supérieur à la taille de la chaine la vide complètement
+	 * 
+	 * @param number
+	 * @return
+	 */
+	public SuperStringBuffer removeLasts(int number) {
+		number = Math.min(number, stringBuffer.length());
+		if (number > 0) {
+			stringBuffer = new StringBuffer(stringBuffer.substring(0, stringBuffer.toString().length() - number));
 		}
 		return this;
 	}
@@ -154,16 +162,7 @@ public class SuperStringBuffer {
 	 * @return
 	 */
     public SuperStringBuffer hex(byte[] bytes) {
-    	if (bytes == null) {
-    		return append("null");
-    	} else if (bytes.length == 0) {
-    		return this;
-    	}
-    	
-        for (byte b : bytes) {
-            append("0x%02X ", b);
-        }
-        return removeLasts(1);
+    	return append(Bits.hex(bytes));
     }
 
     /**
@@ -175,18 +174,18 @@ public class SuperStringBuffer {
      * @return
      */
     public SuperStringBuffer hex(byte b) {
-        return append("0x%02X ", b);
+        return append(Bits.hex(b));
     }
 
     public SuperStringBuffer hex(short s) {
-        return hex(Bits.toBytes(s));
+        return append(Bits.toBytes(s));
     }
     
     public SuperStringBuffer hex(int i) {
-        return hex(Bits.toBytes(i));
+        return append(Bits.toBytes(i));
     }
 
     public SuperStringBuffer hex(long l) {
-        return hex(Bits.toBytes(l));
+        return append(Bits.toBytes(l));
     }
 }

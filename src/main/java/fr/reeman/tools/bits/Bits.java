@@ -2,8 +2,6 @@ package fr.reeman.tools.bits;
 
 import java.nio.ByteBuffer;
 
-import fr.reeman.tools.SuperStringBuffer;
-
 //Copyright (C) 2024 Reeman Nicolas
 //
 //This program is free software; you can redistribute it and/or
@@ -21,10 +19,6 @@ import fr.reeman.tools.SuperStringBuffer;
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 public class Bits {
 
-	private static String hex(byte[] bytes) {
-		return new SuperStringBuffer().hex(bytes).toString();
-	}
-	
 	// byte
 	public static byte[] toBytes(byte value) {
 		return new byte[] { value };
@@ -38,7 +32,7 @@ public class Bits {
 
 	// short
 	public static byte[] toBytes(short value) {
-		return ByteBuffer.allocate(2).putInt(value).array();
+		return ByteBuffer.allocate(2).putShort(value).array();
 	}
 	public static short toShort(byte[] bytes) {
     	if (bytes.length > 2) {
@@ -109,4 +103,38 @@ public class Bits {
 		return value;
 	}
 
+    //           //
+    //           //
+    // FORMATAGE //
+    //           //
+    //           //
+
+	/**
+	 * 
+	 * Exemple : [0b00110001, 0b11001000] devient : "0x31 0xC8"
+	 * 
+	 * @param bytes Un tableau d'octets
+	 * @return Une representation hexadécimale du tableau d'octets
+	 */
+	public static String hex(byte[] bytes) {
+		StringBuffer buffer = new StringBuffer();
+		
+    	if (bytes == null) {
+    		return "null";
+    	} else if (bytes.length == 0) {
+    		return "";
+    	}
+    	
+        for (byte b : bytes) {
+            buffer.append(String.format("0x%02X ", b));
+        }
+        
+        String result = buffer.toString();
+        return result.substring(0, result.length() -1);
+    }
+	
+    public static String hex(byte b)  { return String.format("0x%02X", b); }
+    public static String hex(short s) { return hex(Bits.toBytes(s)); }
+    public static String hex(int i)   { return hex(Bits.toBytes(i)); }
+    public static String hex(long l)  { return hex(Bits.toBytes(l)); }
 }
