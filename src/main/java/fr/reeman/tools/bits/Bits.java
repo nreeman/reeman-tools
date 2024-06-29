@@ -2,6 +2,8 @@ package fr.reeman.tools.bits;
 
 import java.nio.ByteBuffer;
 
+import lombok.NonNull;
+
 //Copyright (C) 2024 Reeman Nicolas
 //
 //This program is free software; you can redistribute it and/or
@@ -65,11 +67,18 @@ public class Bits {
 
     /**
      * 
+     * Déplace les bits de n positions vers la gauche en ignorant et supprimant les octets à zéro non significatifs
+     * 
+     * shiftLeft({ 0x01 }, 2)       => { 0x04 }
+     * shiftLeft({ 0x80 }, 1)       => { 0x01, 0x00 }
+     * shiftLeft({ 0x00, 0x01 }, 2) => { 0x04 }
+     * shiftLeft({ 0x00 }, 1000) => 0x00
+     * 
      * @param bytes
      * @param n
      * @return
      */
-    public static byte[] shiftLeft(byte[] bytes, int n) {
+    public static byte[] shiftLeft(@NonNull byte[] bytes, int n) {
     	int nMod8 = n % 8;
     	int nbNotSignificantLeading0 = 0;
     	for (int i = 0; i < bytes.length - 1; i++) {
@@ -80,6 +89,11 @@ public class Bits {
     		}
     	}
     	int bytesTrueLength = bytes.length - nbNotSignificantLeading0;
+    	
+    	if (bytesTrueLength == 1 && bytes[bytes.length - 1] == 0) {
+    		// Cas particulier om il n'y aucun bit significatif
+    		return new byte[] { 0x00 };
+    	}
     	
 		byte[] result = new byte[bytesTrueLength + (n / 8) + ( (255 & bytes[nbNotSignificantLeading0]) >>> (8 - nMod8) == 0 ? 0 : 1)];
     	System.arraycopy(bytes, nbNotSignificantLeading0, result, result.length - bytesTrueLength - (n / 8), bytesTrueLength);
@@ -116,7 +130,7 @@ public class Bits {
 	 * @param bytes Un tableau d'octets
 	 * @return Une representation hexadécimale du tableau d'octets
 	 */
-	public static String hex(byte[] bytes) {
+	public static String hex(final byte[] bytes) {
 		StringBuffer buffer = new StringBuffer();
 		
     	if (bytes == null) {

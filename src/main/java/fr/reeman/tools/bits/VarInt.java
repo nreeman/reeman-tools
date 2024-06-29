@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.reeman.tools.SuperStringBuffer;
-
 //Copyright (C) 2024 Reeman Nicolas
 //
 //This program is free software; you can redistribute it and/or
@@ -92,11 +90,14 @@ public final class VarInt {
      * @return
      */
     public static byte[] decode(byte[] varInt) {
+    	if (!isValidVarInt(varInt)) {
+    		throw new NumberFormatException("Invalid VarInt");
+    	}
     	byte[] result = new byte[] { (byte) (varInt[varInt.length - 1] & 0x7F) };
-	      for (int i = varInt.length - 2; i >= 0; i--) {
-	    	  result = Bits.shiftLeft(result, 7);
-	    	  result[result.length - 1] |= (byte) (varInt[i] & 0x7F);
-		  }
+		for (int i = varInt.length - 2; i >= 0; i--) {
+			result = Bits.shiftLeft(result, 7);
+			result[result.length - 1] |= (byte) (varInt[i] & 0x7F);
+		}
     	
     	return result;
     }
@@ -179,18 +180,31 @@ public final class VarInt {
     	return result;
     }
 
+    public static boolean isValidVarInt(byte[] bytes) {
+    	if (bytes == null || bytes.length == 0) {
+    		return false;
+    	}
+    	
+    	for (int i = 0; i < bytes.length - 1; i++) {
+    		if ( (bytes[i] & 0x80) == 0 ) {
+    			return false;
+    		}
+    	}
+    	
+		return (bytes[bytes.length - 1] & 0x80) == 0;
+	}
+
+
     private byte[] bytes;
 
     private VarInt(byte[] bytes) {
+    	if (!isValidVarInt(bytes)) {
+    		throw new NumberFormatException("Invalid VarInt");
+    	}
     	this.bytes = bytes;
     }
     
-    @Override
-    public String toString() {
-    	return "[" + new SuperStringBuffer().hex(bytes) + "]";
-    }
-    
-    public VarInt(byte b) {
+	public VarInt(byte b) {
         this.bytes = encode(new byte[] { b });
     }
 
@@ -206,6 +220,11 @@ public final class VarInt {
     	this.bytes = encode(Bits.toBytes(l));
     }
 
+    @Override
+    public String toString() {
+    	return "[" + Bits.hex(bytes) + "]";
+    }
+    
     public byte[] getBytes() {
         return bytes.clone();
     }

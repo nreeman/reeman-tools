@@ -29,7 +29,7 @@ public class SuperStringBuffer {
 		this.stringBuffer = new StringBuffer();
 	}
 
-	public SuperStringBuffer(String string) {
+	public SuperStringBuffer(final String string) {
 		this.stringBuffer = new StringBuffer(string);
 	}
 	
@@ -38,7 +38,7 @@ public class SuperStringBuffer {
 		repeat(n, c);
 	}
 	
-	public SuperStringBuffer(String format, Object ...args) {
+	public SuperStringBuffer(final String format, final Object ...args) {
 		this();
 		append(format, args);
 	}
@@ -55,7 +55,7 @@ public class SuperStringBuffer {
 	 * @param string
 	 * @return
 	 */
-	public String toString(String string) {
+	public String toString(final String string) {
 		return stringBuffer.append(string).toString();
 	}
 
@@ -63,22 +63,17 @@ public class SuperStringBuffer {
 		return stringBuffer.toString().getBytes();
 	}
 	
-	public SuperStringBuffer append(Object object) {
+	public SuperStringBuffer append(final Object object) {
 		stringBuffer.append(object);
 		return this;
 	}
 
-	public SuperStringBuffer append(String string) {
+	public SuperStringBuffer append(final String string) {
 		stringBuffer.append(string);
 		return this;
 	}
 
-//	public SuperStringBuffer append(int i) {
-//		stringBuffer.append(i);
-//		return this;
-//	}
-
-	public SuperStringBuffer append(String format, Object ...args) {
+	public SuperStringBuffer append(final String format, final Object ...args) {
 		stringBuffer.append(String.format(format, args));
 		return this;
 	}
@@ -100,8 +95,12 @@ public class SuperStringBuffer {
 	}
 
 	public SuperStringBuffer flatten(final Object[] objects, final String separator) {
+		return flatten(objects, separator, "null");
+	}
+	
+	public SuperStringBuffer flatten(final Object[] objects, final String separator, final String ifNull) {
 		for (Object object : objects) {
-			stringBuffer.append(stringIfNull(object, "null")).append(separator);
+			stringBuffer.append(stringIfNull(object, ifNull)).append(separator);
 		}
 		return removeLasts(separator.length());
 	}
@@ -141,9 +140,9 @@ public class SuperStringBuffer {
 	 * @param pattern
 	 * @return
 	 */
-	public SuperStringBuffer repeat(int n, String pattern) {
+	public SuperStringBuffer repeat(int n, final String pattern) {
 //		return append(new String(new char[n]).replace("\0", pattern)); // Java 8-
-		return append(pattern.repeat(n)); // Java 9+
+		return append(pattern.repeat(n));                              // Java 9+
 	}
 	
 	public SuperStringBuffer repeat(int n, char c) {
@@ -161,7 +160,7 @@ public class SuperStringBuffer {
 	 * @param bytes
 	 * @return
 	 */
-    public SuperStringBuffer hex(byte[] bytes) {
+    public SuperStringBuffer hex(final byte[] bytes) {
     	return append(Bits.hex(bytes));
     }
 

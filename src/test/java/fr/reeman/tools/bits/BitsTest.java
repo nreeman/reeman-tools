@@ -1,6 +1,9 @@
 package fr.reeman.tools.bits;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -51,4 +54,16 @@ public class BitsTest {
 		assertEquals("0x00 0x00 0x00 0x00 0x00 0x01 0x00 0x00", Bits.hex(65536l));
 	}
 
+	
+	@Test
+	public void shiftLeft() {
+		assertTrue(Arrays.equals(new byte[] { 0x00 }, Bits.shiftLeft(new byte[] { 0x00 }, 1)));
+		
+		assertTrue(Arrays.equals(new byte[] { 0x02 }, Bits.shiftLeft(new byte[] { 0x01 }, 1)));
+		assertTrue(Arrays.equals(new byte[] { 0x02 }, Bits.shiftLeft(new byte[] { 0x00, 0x01 }, 1)));
+		assertTrue(Arrays.equals(new byte[] { 0x01, 0x00 }, Bits.shiftLeft(new byte[] { 0x01 }, 8)));
+		assertTrue(Arrays.equals(new byte[] { 0x01, 0x00 }, Bits.shiftLeft(new byte[] { 0x00, 0x01 }, 8)));
+
+		assertTrue(Arrays.equals(new byte[] { 0x00 }, Bits.shiftLeft(new byte[] { 0x00 }, 16)));
+	}
 }
