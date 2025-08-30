@@ -27,9 +27,14 @@ import lombok.NonNull;
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 public class Comparaison {
 	
-	@Getter private Map<Item, Integer[]> itemsOccurences;
-	@Getter private String[] names;
-	@Getter private int size;
+	@Getter
+	private Map<Item, Integer[]> itemsOccurences;
+	
+	@Getter
+	private String[] names;
+	
+	@Getter
+	private int size;
 	
 	public static Comparaison compare(@NonNull QuantityItemSet... sets) {
 		return new Comparaison(sets.length).doIt(Arrays.asList(sets));

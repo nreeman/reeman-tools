@@ -61,36 +61,24 @@ public class EquivalentCollections {
 
 	/**
 	 * 
-	 * Même comportement que pour un appel à minus(ts, os, equivalent, new ArrayList<>()) mais sans la gestion des exceptions
+	 * Même comportement que pour un appel à minus(ts, os, equivalent, new ArrayList<>())
 	 * 
 	 * 
 	 * @return Une liste représentant le résultat de l'opération ou null en cas d'exception
 	 */
 	public static <T, O> List<T> minusAsList(Collection<T> ts, Collection<O> os, @NonNull Equivalent<T, O> equivalent) {
-		try {
-			return (List<T>)minus(ts, os, equivalent, new ArrayList<>());
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return (List<T>)minus(ts, os, equivalent, new ArrayList<>());
 	}
 
 	/**
 	 * 
-	 * Même comportement que pour un appel à minus(ts, os, equivalent, new HashSet<>()) mais sans la gestion des exceptions
+	 * Même comportement que pour un appel à minus(ts, os, equivalent, new HashSet<>())
 	 * 
 	 * 
 	 * @return Un set représentant le résultat de l'opération ou null en cas d'exception
 	 */
 	public static <T, O> Set<T> minusAsSet(Collection<T> ts, Collection<O> os, @NonNull Equivalent<T, O> equivalent) {
-		try {
-			return (Set<T>)minus(ts, os, equivalent, new HashSet<>());
-		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return (Set<T>)minus(ts, os, equivalent, new HashSet<>());
 	}
 
 	/**
@@ -110,7 +98,7 @@ public class EquivalentCollections {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	public static <T, O> Collection<T> minus(Collection<T> ts, Collection<O> os, @NonNull Equivalent<T, O> equivalent, @NonNull Collection<T> result) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public static <T, O> Collection<T> minus(Collection<T> ts, Collection<O> os, @NonNull Equivalent<T, O> equivalent, @NonNull Collection<T> result) {
 		if (ts == null) {
 			return null;
 		}

@@ -35,7 +35,30 @@ public class ItemHelper<T extends Comparable<T>> implements Item {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object object) {
-		return object == null ? false : comparable.equals( ((ItemHelper<T>)object).comparable );
+		if (object == null) {
+			return false;
+		}
+		
+		if (object instanceof ItemHelper<?>) {
+//			ItemHelper<?> helper = (ItemHelper<?>)object;
+
+//			if (comparable == null && helper.comparable == null) {
+//				return true;
+//			}
+//			
+//			if (comparable == null || helper == null) {
+//				return false;
+//			}
+			
+			try {
+				T t = (T)((ItemHelper<?>)object).comparable;
+				return comparable.equals(t);
+			} catch (ClassCastException e) {
+				return false;
+			}
+		}
+			
+		return false;
 	}
 	
 	@Override

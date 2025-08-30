@@ -103,7 +103,7 @@ public class MarkdownDisplay extends Display {
 		return consoleColors;
 	}
 
-	private int maxToStringLength(Collection<? extends Object> objects) {
+	private int maxToStringLength(Collection<?> objects) {
 		int l = 0;
 		
 		for (Object object : objects) {

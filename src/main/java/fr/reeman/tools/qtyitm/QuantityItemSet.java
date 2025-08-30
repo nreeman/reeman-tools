@@ -29,7 +29,7 @@ public class QuantityItemSet implements Set<QuantityItem> {
 	
 	private String name;
 	private Map<Item, QuantityItem> items;
-	
+
 	private class QuantityItemIterator implements Iterator<QuantityItem> {
 		private Map<Item, QuantityItem> map;
 		private List<Item> sortedKeys;
@@ -70,12 +70,16 @@ public class QuantityItemSet implements Set<QuantityItem> {
 	}
 	
 	public boolean add(int quantity, Item item) {
+		if (quantity < 0) {
+			throw new UnsupportedOperationException("Quantity cannot be increased with a negative value.");
+		}
+
 		QuantityItem quantityItem = items.get(item);
 		
 		if (quantityItem == null) {
 			items.put(item, new QuantityItem(quantity, item));
 		} else {
-			quantityItem.increase(quantity);
+			items.put(item, new QuantityItem(quantity + quantityItem.getQuantity(), item));
 		}
 		
 		return quantityItem == null;
@@ -150,6 +154,10 @@ public class QuantityItemSet implements Set<QuantityItem> {
 	}
 
 	public boolean remove(int quantityToRemove, Item item) {
+		if (quantityToRemove < 0) {
+			throw new UnsupportedOperationException("Quantity removed cannot be a negative value.");
+		}
+
 		QuantityItem quantityItem = items.get(item);
 		if (quantityItem != null) {
 			int oldQty = quantityItem.getQuantity();
@@ -158,7 +166,7 @@ public class QuantityItemSet implements Set<QuantityItem> {
 			if (newQty <= 0) {
 				items.remove(item);
 			} else {
-				quantityItem.setQuantity(newQty);
+				items.put(item, new QuantityItem(newQty, item));
 			}
 			
 			return true;

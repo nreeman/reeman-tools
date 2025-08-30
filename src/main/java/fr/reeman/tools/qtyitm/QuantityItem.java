@@ -1,5 +1,7 @@
 package fr.reeman.tools.qtyitm;
 
+import lombok.Data;
+
 //Copyright (C) 2024 Reeman Nicolas
 //
 //This program is free software; you can redistribute it and/or
@@ -15,39 +17,10 @@ package fr.reeman.tools.qtyitm;
 //You should have received a copy of the GNU Lesser General Public
 //License along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+@Data
 public class QuantityItem {
 
-	private int quantity;
-	private Item item;
+	private final int quantity;
+	private final Item item;
 	
-	public QuantityItem(int quantity, Item item) {
-		if (quantity <= 0) {
-			throw new UnsupportedOperationException("Quantity for a 'QuantityItem' object must be a positive value.");
-		}
-		this.setQuantity(quantity);
-		this.setItem(item);
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public Item getItem() {
-		return item;
-	}
-
-	public void setItem(Item item) {
-		this.item = item;
-	}
-
-	public void increase(int value) {
-		if (value < 0) {
-			throw new UnsupportedOperationException("Quantity cannot be increase with a negative value.");
-		}
-		quantity += value;
-	}
 }
