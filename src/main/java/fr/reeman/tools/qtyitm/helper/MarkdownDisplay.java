@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import fr.reeman.tools.ConsoleColors;
+import fr.reeman.tools.Shortcuts;
 import fr.reeman.tools.SuperStringBuffer;
 import fr.reeman.tools.qtyitm.Comparaison;
 import fr.reeman.tools.qtyitm.Item;
@@ -29,11 +30,20 @@ public class MarkdownDisplay extends Display {
 	
 	@Builder.Default private String zero = "0";
 	private boolean consoleColor;
+	@Builder.Default private boolean intersection = true;
+	@Builder.Default private String intersectionZero = "";
+	private boolean union = false;
 
 	@Override
 	public String generate(Comparaison comparaison) {
 		SuperStringBuffer ssb = new SuperStringBuffer();
 		Map<Item, Integer[]> occurences = comparaison.getItemsOccurences();
+		Map<Item, Integer> intersections = comparaison.getIntersection();
+		Map<Item, Integer> unions = comparaison.getUnion();
+		int intersectionsSum = intersections.values().stream().reduce(0, (a, b) -> (a == null ? 0 : a) + (b == null ? 0 : b));
+		int intersectionsMaxLength = (intersectionsSum + "").length();
+		int unionsSum = unions.values().stream().reduce(0, (a, b) -> (a == null ? 0 : a) + (b == null ? 0 : b));
+		int unionsMaxLength = (intersectionsSum + "").length();
 		String[] names = comparaison.getNames();
 		int[] occurenceMaxLength = new int[comparaison.getNames().length];
 		int labelMaxLength = maxToStringLength(comparaison.getItemsOccurences().keySet());
@@ -46,6 +56,13 @@ public class MarkdownDisplay extends Display {
 		
 		// En-tête du label
 		ssb.append("|").repeat(labelMaxLength + 2, " ").append("|");
+		// En-tête intersection
+		if (intersection) {
+			ssb.append(" %" + intersectionsMaxLength + "s |", intersectionsSum);
+		}
+		if (union) {
+			ssb.append(" %" + unionsMaxLength + "s |", unionsSum);
+		}
 		// En-tête des quantités
 		for (int i = 0; i < names.length; i++) {
 			ssb.append(" %-" + occurenceMaxLength[i] + "s |", names[i]);
@@ -53,6 +70,12 @@ public class MarkdownDisplay extends Display {
 		// Séparateur
 		ssb.append("\n");
 		ssb.append("|:").repeat(labelMaxLength + 1, "-").append("|");
+		if (intersection) {
+			ssb.repeat(intersectionsMaxLength+ 2, "-").append("|");
+		}
+		if (union) {
+			ssb.repeat(unionsMaxLength+ 2, "-").append("|");
+		}
 		for (int i = 0; i < names.length; i++) {
 			ssb.repeat(occurenceMaxLength[i] + 1, "-").append(":|");
 		}
@@ -60,20 +83,24 @@ public class MarkdownDisplay extends Display {
 
 		// Les labels et quantités
 		for (Item item : comparaison.getSortedItem()) {
-			ssb.append("| %-" + labelMaxLength + "s |", item);
 			Integer[] occ = occurences.get(item);
+			String cc = consoleColor ? consoleColor(occ).toString() : "";
+			String reset = consoleColor ? ConsoleColors.RESET.toString() : "";
+			
+			ssb.append("| %-" + labelMaxLength + "s |", item);
+			if (intersection) {
+				Integer i = intersections.get(item);
+				ssb.append(" %s%" + intersectionsMaxLength + "s%s |", cc, i == null || i == 0 ? intersectionZero : i.toString(), reset);
+			}
+			if (union) {
+				ssb.append(" %s%" + unionsMaxLength + "d%s |", cc, unions.get(item), reset);
+			}
 			for (int i = 0; i < occ.length; i++) {
-				
-				String cc = consoleColor ? consoleColor(occ).toString() : "";
-				String reset = consoleColor ? ConsoleColors.RESET.toString() : "";
-				
 				if (occ[i] == null) {
 					ssb.append(" %s%" + occurenceMaxLength[i] + "s%s |", cc, zero, reset);
 				} else {
 					ssb.append(" %s%" + occurenceMaxLength[i] + "d%s |", cc, occ[i], reset);
 				}
-				
-				ssb.append(ConsoleColors.RESET);
 			}
 			ssb.append("\n");
 		}

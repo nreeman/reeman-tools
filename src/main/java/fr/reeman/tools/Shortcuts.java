@@ -50,7 +50,7 @@ public class Shortcuts {
 	 * @return Le max de la liste ou null si la liste est vide.
 	 */
 	public static Integer max(Integer... integers) {
-		if (integers == null) {
+		if (integers == null || integers.length == 0) {
 			return null;
 		}
 		
@@ -66,8 +66,21 @@ public class Shortcuts {
 		
 		for (; index < integers.length; index++) {
 			if (integers[index] != null) {
-				max = max >= integers[index] ? max : integers[index];
+				max = Math.max(max, integers[index]);
 			}
+		}
+		
+		return max;
+	}
+
+	public static Integer maxNullIsZero(Integer... integers) {
+		if (integers == null || integers.length == 0) {
+			return null;
+		}
+		
+		int max = Integer.MIN_VALUE;
+		for (int index = 0; index < integers.length; index++) {
+			max = Math.max(max, integers[index] != null ? integers[index] : 0);
 		}
 		
 		return max;
@@ -81,7 +94,7 @@ public class Shortcuts {
 	 * @return Le min de la liste ou null si la liste est vide.
 	 */
 	public static Integer min(Integer... integers) {
-		if (integers == null) {
+		if (integers == null || integers.length == 0) {
 			return null;
 		}
 		
@@ -98,13 +111,25 @@ public class Shortcuts {
 		for (; index < integers.length; index++) {
 			if (integers[index] != null) {
 				min = Math.min(min, integers[index]);
-				min = min <= integers[index] ? min : integers[index];
 			}
 		}
 		
 		return min;
 	}
-	
+
+	public static Integer minNullIsZero(Integer... integers) {
+		if (integers == null || integers.length == 0) {
+			return null;
+		}
+		
+		int min = Integer.MAX_VALUE;
+		for (int index = 0; index < integers.length; index++) {
+			min = Math.min(min, integers[index] != null ? integers[index] : 0);
+		}
+		
+		return min;
+	}
+
 	/**
 	 * Tri une collection dans une nouvelle instance d'une liste.
 	 * 

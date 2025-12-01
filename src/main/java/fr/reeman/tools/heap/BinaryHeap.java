@@ -1,7 +1,7 @@
 package fr.reeman.tools.heap;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -12,45 +12,26 @@ public class BinaryHeap<T> {
 
 	public static final int CAPACITY_DEFAULT = computeCapacity(6);
 
-	private T[] elements;
+	private Object[] elements;
 	private int offset;
 	private final Comparator<T> comparator;
 
-	public static class BinaryHeapBuilder<T> {
-		private Class<T> clazz;
-		private Comparator<T> comparator;
-		private int capacity = CAPACITY_DEFAULT;
-		private Collection<T> init = null;
-		
-		private BinaryHeapBuilder(@NonNull Class<T> clazz, @NonNull Comparator<T> comparator) {
-			this.clazz = clazz;
-			this.comparator = comparator;
-		}
+	public BinaryHeap(@NonNull Comparator<T> comparator) {
+		this(comparator, CAPACITY_DEFAULT, null);
+	}
 
-		public BinaryHeap<T> build() {
-			return new BinaryHeap<T>(clazz, comparator, capacity, init);
-		}
-		
-		public BinaryHeapBuilder<T> capacity(int capacity) {
-			this.capacity = capacity;
-			return this;
-		}
-		
-		public BinaryHeapBuilder<T> init(Collection<T> init) {
-			this.init = init;
-			return this;
-		}
+	public BinaryHeap(@NonNull Comparator<T> comparator, int capacity) {
+		this(comparator, capacity, null);
 	}
-	
-	public static <T> BinaryHeapBuilder<T> builder(Class<T> clazz, Comparator<T> comparator) {
-		return new BinaryHeapBuilder<T>(clazz, comparator);
+
+	public BinaryHeap(@NonNull Comparator<T> comparator, Collection<T> init) {
+		this(comparator, CAPACITY_DEFAULT, init);
 	}
-	
-	@SuppressWarnings("unchecked")
-	private BinaryHeap(@NonNull Class<T> clazz, @NonNull Comparator<T> comparator, int capacity, Collection<T> init) {
+
+	public BinaryHeap(@NonNull Comparator<T> comparator, int capacity, Collection<T> init) {
 		this.comparator = comparator;
 		capacity = (init != null && init.size() > capacity) ? init.size() : capacity;
-		this.elements = (T[]) Array.newInstance(clazz, computeCapacity(elementsToLevel(capacity)));
+		this.elements = new Object[computeCapacity(elementsToLevel(capacity))];
 		this.offset = 0;
 		
 		if (init != null && init.size() > 0) {
@@ -107,7 +88,8 @@ public class BinaryHeap<T> {
 			return null;
 		}
 
-		T extracted = elements[0];
+		@SuppressWarnings("unchecked")
+		T extracted = (T)elements[0];
 		elements[0] = elements[offset - 1];
 		elements[offset - 1] = null;
 		percolateDown(0);
@@ -148,7 +130,8 @@ public class BinaryHeap<T> {
 	 * @param offset2
 	 */
 	private void swap(int offset1, int offset2) {
-		T t = elements[offset1];
+		@SuppressWarnings("unchecked")
+		T t = (T)elements[offset1];
 		elements[offset1] = elements[offset2];
 		elements[offset2] = t;
 	}
@@ -160,6 +143,7 @@ public class BinaryHeap<T> {
 	 * @param currentOffset offset de l'élément à potentiellement déplacer
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	private void percolateUp(int currentOffset) {
 		if (currentOffset == 0) {
 			return;
@@ -167,7 +151,7 @@ public class BinaryHeap<T> {
 		
 		int fatherOffset = (currentOffset - 1) / 2;
 
-		if (comparator.compare(elements[currentOffset], elements[fatherOffset]) == 1) {
+		if (comparator.compare((T)elements[currentOffset], (T)elements[fatherOffset]) == 1) {
 			swap(currentOffset, fatherOffset);
 			percolateUp(fatherOffset);
 		}
@@ -180,6 +164,7 @@ public class BinaryHeap<T> {
 	 * @param currentOffset offset de l'élément à potentiellement déplacer
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	private void percolateDown(int currentOffset) {
 		int firstChildOffset = 2*currentOffset + 1;
 		
@@ -190,13 +175,25 @@ public class BinaryHeap<T> {
 		int choosenChildOffset = firstChildOffset;
 		int secondChildOffset = 2*currentOffset + 2;
 		if (secondChildOffset < capacity() && elements[secondChildOffset] != null) {
-			choosenChildOffset = comparator.compare(elements[firstChildOffset], elements[secondChildOffset]) == 1 ? firstChildOffset : secondChildOffset;
+			choosenChildOffset = comparator.compare((T)elements[firstChildOffset], (T)elements[secondChildOffset]) == 1 ? firstChildOffset : secondChildOffset;
 		}
 
-		if (comparator.compare(elements[currentOffset], elements[choosenChildOffset]) == -1) {
+		if (comparator.compare((T)elements[currentOffset], (T)elements[choosenChildOffset]) == -1) {
 			swap(currentOffset, choosenChildOffset);
 			percolateDown(choosenChildOffset);
 		}
+	}
+
+	@Override
+	public String toString() {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		PrintStream out = new PrintStream(byteArrayOutputStream);
+		print(out);
+		return new String(byteArrayOutputStream.toByteArray());
+	}
+	
+	public void print() {
+		print("", 0, System.out);
 	}
 
 	public void print(PrintStream out) {

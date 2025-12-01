@@ -1,5 +1,8 @@
 package fr.reeman.tools.bits;
 
+import java.util.List;
+import java.util.function.Function;
+
 //Copyright (C) 2024 Reeman Nicolas
 //
 //This program is free software; you can redistribute it and/or
@@ -15,7 +18,47 @@ package fr.reeman.tools.bits;
 //You should have received a copy of the GNU Lesser General Public
 //License along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+// https://en.wikipedia.org/wiki/Base32
+
 public class Base32 {
+	
+//	public class Base32Parameters {
+//		
+//		public enum PaddingPolicy {
+//			NONE,
+//			OPTIONAL,
+//			REQUIRED
+//		}
+//		
+//		private final List<Character> alphabet;
+//		private final PaddingPolicy paddingPolicy;
+//		private final char padding;
+//
+//		public Base32Parameters(List<Character> alphabet) {
+//			this(alphabet, PaddingPolicy.OPTIONAL, '=');
+//		}
+//		
+//		public Base32Parameters(List<Character> alphabet, PaddingPolicy paddingPolicy, char padding) {
+//			this.alphabet = alphabet;
+//			this.paddingPolicy = paddingPolicy;
+//			this.padding = padding;
+//		}
+//	}
+	
+	private static final List<Character> ALPHABET_BASE32 = List.of(
+			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+			'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+			'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+			'Y', 'Z', '2', '3', '4', '5', '6', '7'
+		);
+
+	private static final List<Character> ALPHABET_Z_BASE32 = List.of(
+			'y', 'b', 'n', 'd', 'r', 'f', 'g', '8',
+			'e', 'j', 'k', 'm', 'c', 'p', 'q', 'x',
+			'o', 't', '1', 'u', 'w', 'i', 's', 'z',
+			'a', '3', '4', '5', 'h', '7', '6', '9'
+		);
 
 	/*
 	 * 0 :                                          next = (decode << 3)
@@ -39,15 +82,23 @@ public class Base32 {
 	 * @throws RuntimeException Si la chaine en entrée n'est pas au format Base32
 	 */
 	public static byte[] decode(final String base32) {
-		int size = (base32.length() * 5) / 8 + ((base32.length() * 5) % 8 != 0 ? 1 : 0);
+		return decode(base32, c -> (byte)ALPHABET_BASE32.indexOf(Character.toUpperCase(c)));
+	}
+
+	public static byte[] zdecode(final String base32) {
+		return decode(base32, c -> (byte)ALPHABET_Z_BASE32.indexOf(Character.toLowerCase(c)));
+	}
+
+	private static byte[] decode(final String base32, Function<Character, Byte> char2byte) {
+		String local32 = base32;
+		while (local32.length() > 0 && local32.charAt(local32.length() -1) == '=') {
+			local32 = local32.substring(0, local32.length() - 1);
+		}
+		int size = ((local32.length() * 5) / 8);
 		byte[] bytes = new byte[size];
 		int decodeIndex = -1;
-		for (int i = 0; i < base32.toUpperCase().length(); i++) {
-			char c = base32.charAt(i);
-			if (c == '=') {
-				break;
-			}
-			byte bits = charToBase32(c);
+		for (int i = 0; i < local32.length(); i++) {
+			byte bits = char2byte.apply(local32.charAt(i));
 			if (DECODE_CURRENT[i%8] != -128) {
 				if (DECODE_CURRENT[i%8] >= 0) {
 					bytes[decodeIndex] = (byte) (bytes[decodeIndex] ^ (bits << DECODE_CURRENT[i%8]));
@@ -56,12 +107,11 @@ public class Base32 {
 				}
 			}
 			
-			if (DECODE_NEXT[i%8] != 0) {
-				decodeIndex ++;
-				bytes[decodeIndex] = (byte) (bits << DECODE_NEXT[i%8]);
+			if (DECODE_NEXT[i%8] != 0 && decodeIndex < size - 1) {
+				bytes[++decodeIndex] = (byte) (bits << DECODE_NEXT[i%8]);
 			}
-
 		}
+		
 		return bytes;
 	}
 	
@@ -88,8 +138,20 @@ public class Base32 {
 	 * @return La chaine de carctère Base32
 	 */
 	public static String encode(final byte[] bytes) {
+		return encode(bytes, b -> ALPHABET_BASE32.get(b), false);
+	}
+	
+	public static String encode(final byte[] bytes, boolean padding) {
+		return encode(bytes, b -> ALPHABET_BASE32.get(b), padding);
+	}
+	
+	public static String zencode(final byte[] bytes) {
+		return encode(bytes, b -> ALPHABET_Z_BASE32.get(b), false);
+	}
+	
+	private static String encode(final byte[] bytes, Function<Byte, Character> byte2char, boolean padding) {
 		StringBuffer decode = new StringBuffer();
-		int size = (bytes.length * 8 / 5) + ( bytes.length * 8 % 5 != 0 ? 1 : 0);
+		int size = (bytes.length * 8 / 5) + (bytes.length * 8 % 5 != 0 ? 1 : 0);
 		int codeIndex = -1;
 		for (int i = 0; i < size; i++) {
 			byte currentCode = 0;
@@ -106,85 +168,16 @@ public class Base32 {
 				currentCode = (byte)( currentCode | ( ENCODE_NEXT_MASK[i%8] & (bytes[codeIndex] >> ENCODE_NEXT[i%8]) ) );
 			}
 			
-			decode.append(base32ToChar(currentCode));
+			decode.append(byte2char.apply(currentCode));
+		}
+		
+		if (padding) {
+			while (decode.length() % 8 != 0) {
+				decode.append("=");
+			}
 		}
 		
 		return decode.toString();
 	}
 
-	private static byte charToBase32(char c) {
-		switch (c) {
-			case 'A': return 0b00000;
-			case 'B': return 0b00001;
-			case 'C': return 0b00010;
-			case 'D': return 0b00011;
-			case 'E': return 0b00100;
-			case 'F': return 0b00101;
-			case 'G': return 0b00110;
-			case 'H': return 0b00111;
-			case 'I': return 0b01000;
-			case 'J': return 0b01001;
-			case 'K': return 0b01010;
-			case 'L': return 0b01011;
-			case 'M': return 0b01100;
-			case 'N': return 0b01101;
-			case 'O': return 0b01110;
-			case 'P': return 0b01111;
-			case 'Q': return 0b10000;
-			case 'R': return 0b10001;
-			case 'S': return 0b10010;
-			case 'T': return 0b10011;
-			case 'U': return 0b10100;
-			case 'V': return 0b10101;
-			case 'W': return 0b10110;
-			case 'X': return 0b10111;
-			case 'Y': return 0b11000;
-			case 'Z': return 0b11001;
-			case '2': return 0b11010;
-			case '3': return 0b11011;
-			case '4': return 0b11100;
-			case '5': return 0b11101;
-			case '6': return 0b11110;
-			case '7': return 0b11111; 
-			default:
-				throw new RuntimeException("Le caractère '" + c + "' n'est pas géré en Base32.");
-		}
-	}
-
-	private static char base32ToChar(byte b) {
-		switch (b) {
-			case 0b00000: return 'A';
-			case 0b00001: return 'B';
-			case 0b00010: return 'C';
-			case 0b00011: return 'D';
-			case 0b00100: return 'E';
-			case 0b00101: return 'F';
-			case 0b00110: return 'G';
-			case 0b00111: return 'H';
-			case 0b01000: return 'I';
-			case 0b01001: return 'J';
-			case 0b01010: return 'K';
-			case 0b01011: return 'L';
-			case 0b01100: return 'M';
-			case 0b01101: return 'N';
-			case 0b01110: return 'O';
-			case 0b01111: return 'P';
-			case 0b10000: return 'Q';
-			case 0b10001: return 'R';
-			case 0b10010: return 'S';
-			case 0b10011: return 'T';
-			case 0b10100: return 'U';
-			case 0b10101: return 'V';
-			case 0b10110: return 'W';
-			case 0b10111: return 'X';
-			case 0b11000: return 'Y';
-			case 0b11001: return 'Z';
-			case 0b11010: return '2';
-			case 0b11011: return '3';
-			case 0b11100: return '4';
-			case 0b11101: return '5';
-			case 0b11110: return '6';
-			default: return '7'; // 0b11111
-		}
-	}
 }

@@ -1,6 +1,7 @@
 package fr.reeman.tools.bits;
 
 import java.nio.ByteBuffer;
+import java.util.function.Function;
 
 import lombok.NonNull;
 
@@ -122,6 +123,20 @@ public class Bits {
     // FORMATAGE //
     //           //
     //           //
+	public static String dec(final byte[] bytes) {
+		return formatBytesArrays(bytes, b -> Byte.toUnsignedInt(b) + "");
+    }
+
+	public static String bin(final byte[] bytes) {
+		return formatBytesArrays(bytes, b -> bin(b));
+	}
+    public static String bin(byte b) {
+    	String hex = String.format("%02X", b);
+    	return hex2bin(hex.charAt(0)) + hex2bin(hex.charAt(1));
+    }
+    public static String bin(short s) { return bin(Bits.toBytes(s)); }
+    public static String bin(int i)   { return bin(Bits.toBytes(i)); }
+    public static String bin(long l)  { return bin(Bits.toBytes(l)); }
 
 	/**
 	 * 
@@ -131,24 +146,48 @@ public class Bits {
 	 * @return Une representation hexadécimale du tableau d'octets
 	 */
 	public static String hex(final byte[] bytes) {
-		StringBuffer buffer = new StringBuffer();
-		
+		return formatBytesArrays(bytes, b -> hex(b));
+    }
+	public static String hex(byte b)  { return String.format("0x%02X", b); }
+    public static String hex(short s) { return hex(Bits.toBytes(s)); }
+    public static String hex(int i)   { return hex(Bits.toBytes(i)); }
+    public static String hex(long l)  { return hex(Bits.toBytes(l)); }
+    
+    public static String hex2bin(char c) {
+    	return switch (c) {
+			case '0' -> "0000";
+			case '1' -> "0001";
+			case '2' -> "0010";
+			case '3' -> "0011";
+			case '4' -> "0100";
+			case '5' -> "0101";
+			case '6' -> "0110";
+			case '7' -> "0111";
+			case '8' -> "1000";
+			case '9' -> "1001";
+			case 'A', 'a' -> "1010";
+			case 'B', 'b' -> "1011";
+			case 'C', 'c' -> "1100";
+			case 'D', 'd' -> "1101";
+			case 'E', 'e' -> "1110";
+			case 'F', 'f' -> "1111";
+			default -> throw new IllegalArgumentException("Unexpected value: " + c);
+		};
+    }
+
+	private static String formatBytesArrays(final byte[] bytes, Function<Byte, String> mapper) {
     	if (bytes == null) {
     		return "null";
     	} else if (bytes.length == 0) {
     		return "";
     	}
     	
+		StringBuffer buffer = new StringBuffer();
         for (byte b : bytes) {
-            buffer.append(String.format("0x%02X ", b));
+            buffer.append(mapper.apply(b)).append(" ");
         }
         
         String result = buffer.toString();
         return result.substring(0, result.length() -1);
     }
-	
-    public static String hex(byte b)  { return String.format("0x%02X", b); }
-    public static String hex(short s) { return hex(Bits.toBytes(s)); }
-    public static String hex(int i)   { return hex(Bits.toBytes(i)); }
-    public static String hex(long l)  { return hex(Bits.toBytes(l)); }
 }

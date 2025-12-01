@@ -7,26 +7,21 @@ import java.util.List;
 
 import org.junit.Test;
 
-import fr.reeman.tools.heap.BinaryHeap;
-
 public class BinaryHeapTest {
 	
 	@Test
 	public void testCapacity() {
-		assertEquals(0, BinaryHeap.builder(String.class, (s1, s2) -> s1.compareTo(s2)).capacity(0).build().capacity());
-		assertEquals(1, BinaryHeap.builder(String.class, (s1, s2) -> s1.compareTo(s2)).capacity(1).build().capacity());
-		assertEquals(3, BinaryHeap.builder(String.class, (s1, s2) -> s1.compareTo(s2)).capacity(2).build().capacity());
-		assertEquals(3, BinaryHeap.builder(String.class, (s1, s2) -> s1.compareTo(s2)).capacity(3).build().capacity());
-		assertEquals(7, BinaryHeap.builder(String.class, (s1, s2) -> s1.compareTo(s2)).capacity(4).build().capacity());
-		assertEquals(7, BinaryHeap.builder(String.class, (s1, s2) -> s1.compareTo(s2)).capacity(7).build().capacity());
+		assertEquals(0, new BinaryHeap<String>((s1, s2) -> s1.compareTo(s2), 0).capacity());
+		assertEquals(1, new BinaryHeap<String>((s1, s2) -> s1.compareTo(s2), 1).capacity());
+		assertEquals(3, new BinaryHeap<String>((s1, s2) -> s1.compareTo(s2), 2).capacity());
+		assertEquals(3, new BinaryHeap<String>((s1, s2) -> s1.compareTo(s2), 3).capacity());
+		assertEquals(7, new BinaryHeap<String>((s1, s2) -> s1.compareTo(s2), 4).capacity());
+		assertEquals(7, new BinaryHeap<String>((s1, s2) -> s1.compareTo(s2), 7).capacity());
 	}
 
 	@Test
 	public void testInsertAndExtract() {
-		BinaryHeap<Integer> heap = BinaryHeap
-									.builder(Integer.class, Comparator.comparingInt(Integer::intValue))
-									.capacity(0)
-									.build();
+		BinaryHeap<Integer> heap = new BinaryHeap<>(Comparator.comparingInt(Integer::intValue), 0);
 		assertEquals(0, heap.size());
 		assertEquals(0, heap.capacity());
 		
@@ -71,11 +66,7 @@ public class BinaryHeapTest {
 
 	@Test
 	public void testInit() {
-		BinaryHeap<Integer> heap = BinaryHeap
-									.builder(Integer.class, Comparator.comparingInt(Integer::intValue))
-									.capacity(0)
-									.init(List.of(1, 2, 3, 4, 5))
-									.build();
+		BinaryHeap<Integer> heap = new BinaryHeap<>(Comparator.comparingInt(Integer::intValue), 0, List.of(1, 2, 3, 4, 5));
 
 		assertEquals(7, heap.capacity());
 		assertEquals(Integer.valueOf(5), heap.extract());
@@ -87,22 +78,17 @@ public class BinaryHeapTest {
 	
 	@Test
 	public void print() {
-		BinaryHeap<Integer> heap = BinaryHeap
-				.builder(Integer.class, (e1, e2) -> e2.compareTo(e1))
-				.capacity(0)
-				.init(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17))
-				.build();
+		BinaryHeap<Integer> heap = new BinaryHeap<>((i1, i2) -> i2.compareTo(i1), 0, List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17));
 		heap.print(System.out);
 
 		System.out.println();
 		
-		heap = BinaryHeap
-				.builder(Integer.class, (e1, e2) -> e2.compareTo(e1))
-				.capacity(127)
-				.build();
+		heap = new BinaryHeap<>((i1, i2) -> i2.compareTo(i1), 127);
 		for (int i = 1; i < 128; i++) {
 			heap.insert(i);
 		}
 		//heap.print(System.out);
+		
+//		System.out.println(heap);
 	}
 }

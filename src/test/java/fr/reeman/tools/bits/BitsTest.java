@@ -3,6 +3,7 @@ package fr.reeman.tools.bits;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 import org.junit.Test;

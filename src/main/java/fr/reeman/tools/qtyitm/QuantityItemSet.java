@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 //Copyright (C) 2024 Reeman Nicolas
@@ -238,5 +239,10 @@ public class QuantityItemSet implements Set<QuantityItem> {
 		Collections.sort(list);
 		return list;
 
+	}
+
+	public Optional<QuantityItem> find(Item item) {
+		QuantityItem quantityItem = items.get(item);
+		return quantityItem == null ? Optional.empty() : Optional.of(quantityItem);
 	}
 }

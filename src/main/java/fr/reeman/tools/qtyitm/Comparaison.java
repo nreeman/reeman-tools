@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.reeman.tools.Shortcuts;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -26,6 +27,8 @@ import lombok.NonNull;
 //License along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 public class Comparaison {
+
+	private QuantityItemSet[] data;
 	
 	@Getter
 	private Map<Item, Integer[]> itemsOccurences;
@@ -34,26 +37,34 @@ public class Comparaison {
 	private String[] names;
 	
 	@Getter
-	private int size;
+	private Map<Item, Integer> intersection;
+	
+	@Getter
+	private Map<Item, Integer> union;
 	
 	public static Comparaison compare(@NonNull QuantityItemSet... sets) {
-		return new Comparaison(sets.length).doIt(Arrays.asList(sets));
+		return new Comparaison(sets).doIt(Arrays.asList(sets));
 	}
 	
 	public static Comparaison compare(@NonNull List<QuantityItemSet> sets) {
-		return new Comparaison(sets.size()).doIt(sets);
+		return new Comparaison(sets.toArray(QuantityItemSet[]::new)).doIt(sets);
 	}
 	
-	private Comparaison(int size) {
+	private Comparaison(QuantityItemSet[] data) {
+		this.data = data;
 		this.itemsOccurences = new HashMap<Item, Integer[]>();
-		this.names = new String[size];
-		this.size = size;
+		this.names = new String[data.length];
+		this.intersection = new HashMap<Item, Integer>();
+		this.union = new HashMap<Item, Integer>();
 	}
 
 	private Comparaison doIt(List<QuantityItemSet> sets) {
 		for (int i = 0; i < sets.size(); i++) {
 			add(sets.get(i), i);
 		}
+		
+		itemsOccurences.forEach((k, v) -> intersection.put(k, Shortcuts.minNullIsZero(v)));
+		itemsOccurences.forEach((k, v) -> union.put(k, Shortcuts.maxNullIsZero(v)));
 		
 		return this;
 	}
@@ -63,7 +74,7 @@ public class Comparaison {
 		for (QuantityItem quantityItem : quantityItemSet) {
 			Integer[] numbers = itemsOccurences.get(quantityItem.getItem());
 			if (numbers == null) {
-				numbers = new Integer[size];
+				numbers = new Integer[data.length];
 				itemsOccurences.put(quantityItem.getItem(), numbers);
 			}
 			numbers[rank] = quantityItem.getQuantity();

@@ -100,7 +100,7 @@ public enum ConsoleColors {
 	
 	;
 	
-	private String val;
+	private final String val;
 	
 	private ConsoleColors(String val) {
 		this.val = val;

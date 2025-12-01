@@ -112,10 +112,6 @@ public final class VarInt {
     public static VarInt read(ByteArrayInputStream input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         int i = input.read();
-        
-        if (i == -1) {
-        	return null;
-        }
 
         while (i != -1) {
             byte b = (byte) (255 & i);
@@ -131,24 +127,8 @@ public final class VarInt {
         return out.length == 0 ? null : new VarInt(out);
     }
 
-//    /**
-//     * Lit les n prochains VarInt dans un flux
-//     * @param input
-//     * @param n Le nombre de VarInt à lire
-//     * @return Un tableau contenant les VarInt lus.
-//     */
-//    public static VarInt[] read(ByteArrayInputStream input, int n) {
-//        VarInt[] varInts = new VarInt[n];
-//
-//        for (int i = 0; i < n; i++) {
-//            varInts[i] = read(input);
-//        }
-//
-//        return varInts;
-//    }
-
     /**
-     * Lit un flux d'octets et le converti en tableau de <code>VarInt</code>.
+     * Lit entièrement un flux d'octets et le converti en tableau de <code>VarInt</code>.
      * 
      * @param input Un flux d'octets
      * @return Un tableau de <code>VarInt</code>
@@ -162,24 +142,13 @@ public final class VarInt {
             varInt = read(input);
         }
 
-        return varInts.toArray(new VarInt[] {});
-    }
-    
-    /**
-     * Decode un flux de <code>VarInt</code> directement en tableau de <code>int</code>. 
-     * 
-     * @param bytes Un flux de <code>VarInt</code> sous forme de flux d'octets.
-     * @return Un tableau de <code>int</code> qui est la traduction du flux.
-     */
-    public static int[] decodeAsIntArray(byte[] bytes) {
-    	VarInt[] varInts =  readAll(new ByteArrayInputStream(bytes));
-    	int result[] = new int[varInts.length];
-    	for (int i = 0; i < varInts.length; i++) {
-    		result[i] = varInts[i].intValue();
-    	}
-    	return result;
+        return varInts.toArray(VarInt[]::new);
     }
 
+    public static VarInt[] readAll(byte[] bytes) {
+    	return readAll(new ByteArrayInputStream(bytes));
+    }
+    
     public static boolean isValidVarInt(byte[] bytes) {
     	if (bytes == null || bytes.length == 0) {
     		return false;

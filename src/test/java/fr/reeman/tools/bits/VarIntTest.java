@@ -1,8 +1,10 @@
 package fr.reeman.tools.bits;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -44,5 +46,10 @@ public class VarIntTest {
 		assertFalse(VarInt.isValidVarInt(new byte [] {}));
 		assertFalse(VarInt.isValidVarInt(new byte [] { (byte)0x80 }));
 		assertFalse(VarInt.isValidVarInt(new byte [] { (byte)0xA5, (byte)0x4C, 0x00 }));
+	}
+	
+	@Test
+	public void readFromInputStream() {
+		assertNull(VarInt.read(new ByteArrayInputStream(new byte[] {})));
 	}
 }
