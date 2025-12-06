@@ -1,10 +1,6 @@
 package fr.reeman.tools.bits;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 //Copyright (C) 2024 Reeman Nicolas
 //
@@ -22,8 +18,10 @@ import java.util.List;
 //License along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 public final class VarInt {
+	
+	private static final byte[] MASKS = new byte[] { 0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00 };
 
-	private static final byte[] MASKS  = new byte[] { 0x7F, 0x3F, 0x1F, 0x0F, 0x07, 0x03, 0x01, 0x00 };
+	public static final VarInt ZERO = new VarInt(new byte[] { 0x00 });
 
     /**
      * Traduit un tableau d'octets en son équivalent au format <code>VarInt</code>.
@@ -109,23 +107,24 @@ public final class VarInt {
      * @param input Un flux d'octets
      * @return Un <code>VarInt</code> ou <code>null</code> s'il n'a pu être construit.
      */
-    public static VarInt read(ByteArrayInputStream input) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        int i = input.read();
-
-        while (i != -1) {
-            byte b = (byte) (255 & i);
-            output.write(b);
-            if ((b & 0x80) == 0x00) {
-            	break;
-            }
-            
-            i = input.read();
-        }
-        
-        byte[] out = output.toByteArray();
-        return out.length == 0 ? null : new VarInt(out);
-    }
+//    @Deprecated
+//    public static VarInt read(ByteArrayInputStream input) {
+//        ByteArrayOutputStream output = new ByteArrayOutputStream();
+//        int i = input.read();
+//
+//        while (i != -1) {
+//            byte b = (byte) (255 & i);
+//            output.write(b);
+//            if ((b & 0x80) == 0x00) {
+//            	break;
+//            }
+//            
+//            i = input.read();
+//        }
+//        
+//        byte[] out = output.toByteArray();
+//        return out.length == 0 ? null : new VarInt(out);
+//    }
 
     /**
      * Lit entièrement un flux d'octets et le converti en tableau de <code>VarInt</code>.
@@ -133,21 +132,21 @@ public final class VarInt {
      * @param input Un flux d'octets
      * @return Un tableau de <code>VarInt</code>
      */
-    public static VarInt[] readAll(ByteArrayInputStream input) {
-        List<VarInt> varInts = new ArrayList<>();
-
-        VarInt varInt = read(input);
-        while (varInt != null) {
-            varInts.add(varInt);
-            varInt = read(input);
-        }
-
-        return varInts.toArray(VarInt[]::new);
-    }
-
-    public static VarInt[] readAll(byte[] bytes) {
-    	return readAll(new ByteArrayInputStream(bytes));
-    }
+//    public static VarInt[] readAll(ByteArrayInputStream input) {
+//        List<VarInt> varInts = new ArrayList<>();
+//
+//        VarInt varInt = read(input);
+//        while (varInt != null) {
+//            varInts.add(varInt);
+//            varInt = read(input);
+//        }
+//
+//        return varInts.toArray(VarInt[]::new);
+//    }
+//
+//    public static VarInt[] readAll(byte[] bytes) {
+//    	return readAll(new ByteArrayInputStream(bytes));
+//    }
     
     public static boolean isValidVarInt(byte[] bytes) {
     	if (bytes == null || bytes.length == 0) {
@@ -166,7 +165,7 @@ public final class VarInt {
 
     private byte[] bytes;
 
-    private VarInt(byte[] bytes) {
+    public VarInt(byte[] bytes) {
     	if (!isValidVarInt(bytes)) {
     		throw new NumberFormatException("Invalid VarInt");
     	}
