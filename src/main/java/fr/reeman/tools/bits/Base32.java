@@ -19,32 +19,10 @@ import java.util.function.Function;
 //License along with this program; if not, write to the Free Software
 //Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-// https://en.wikipedia.org/wiki/Base32
-
+/**
+ * @see https://en.wikipedia.org/wiki/Base32
+ */
 public class Base32 {
-	
-//	public class Base32Parameters {
-//		
-//		public enum PaddingPolicy {
-//			NONE,
-//			OPTIONAL,
-//			REQUIRED
-//		}
-//		
-//		private final List<Character> alphabet;
-//		private final PaddingPolicy paddingPolicy;
-//		private final char padding;
-//
-//		public Base32Parameters(List<Character> alphabet) {
-//			this(alphabet, PaddingPolicy.OPTIONAL, '=');
-//		}
-//		
-//		public Base32Parameters(List<Character> alphabet, PaddingPolicy paddingPolicy, char padding) {
-//			this.alphabet = alphabet;
-//			this.paddingPolicy = paddingPolicy;
-//			this.padding = padding;
-//		}
-//	}
 	
 	private static final List<Character> ALPHABET_BASE32 = List.of(
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',

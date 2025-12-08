@@ -1,9 +1,15 @@
 package fr.reeman.tools.qtyitm.section;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.Objects;
+
+import org.junit.jupiter.api.Test;
 
 import fr.reeman.tools.qtyitm.Item;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public class SectionTest {
@@ -20,6 +26,10 @@ public class SectionTest {
 		RUNE("Rune"),
 		SIDEBOARD("Sideboard")
 		;
+		
+		public static RiftboundCardSection fromLabelIgnoreCase(@NonNull final String label) {
+			return Section.fromLabelIgnoreCase(label, RiftboundCardSection.class);
+		}
 		
 		@Getter
 		private final String label;
@@ -62,4 +72,11 @@ public class SectionTest {
 		}
 	}
 
+	@Test
+	public void testFromLabel() {
+		assertEquals(RiftboundCardSection.LEGEND, Section.fromLabel("Legend", RiftboundCardSection.class));
+		assertEquals(RiftboundCardSection.SIGNATURE, RiftboundCardSection.fromLabelIgnoreCase("signature"));
+		assertNull(Section.fromLabel("LEGEND", RiftboundCardSection.class));
+		assertNull(RiftboundCardSection.fromLabelIgnoreCase("toto"));
+	}
 }

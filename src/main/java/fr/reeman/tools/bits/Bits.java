@@ -92,7 +92,7 @@ public class Bits {
     	int bytesTrueLength = bytes.length - nbNotSignificantLeading0;
     	
     	if (bytesTrueLength == 1 && bytes[bytes.length - 1] == 0) {
-    		// Cas particulier om il n'y aucun bit significatif
+    		// Cas particulier où il n'y aucun bit significatif
     		return new byte[] { 0x00 };
     	}
     	
@@ -118,11 +118,11 @@ public class Bits {
 		return value;
 	}
 
-    //           //
-    //           //
-    // FORMATAGE //
-    //           //
-    //           //
+    //        //
+    //        //
+    // FORMAT //
+    //        //
+    //        //
 	public static String dec(final byte[] bytes) {
 		return formatBytesArrays(bytes, b -> Byte.toUnsignedInt(b) + "");
     }

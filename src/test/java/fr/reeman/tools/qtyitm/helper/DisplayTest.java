@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import fr.reeman.tools.qtyitm.Comparaison;
 import fr.reeman.tools.qtyitm.Operations;

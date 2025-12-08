@@ -2,10 +2,9 @@ package fr.reeman.tools.qtyitm.builder;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import fr.reeman.tools.qtyitm.Comparaison;
-import fr.reeman.tools.qtyitm.Item;
 import fr.reeman.tools.qtyitm.QuantityItemSet;
 import fr.reeman.tools.qtyitm.helper.MarkdownDisplay;
 

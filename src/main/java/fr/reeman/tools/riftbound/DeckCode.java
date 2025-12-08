@@ -27,30 +27,27 @@ public class DeckCode {
 	public static final int LAST_VERSION = SUPPORTED_VERSIONS[SUPPORTED_VERSIONS.length - 1];
 	private static final byte[] LAST_VERSION_AS_VARINT_BYTES_ARRAY = new VarInt(LAST_VERSION).getBytes();
 
-	private record SetVariant(int set, int variant) implements Comparable<SetVariant>{
+	private record SetAndVariant(int set, int variant) implements Comparable<SetAndVariant>{
 		@Override
-		public int compareTo(SetVariant other) {
+		public int compareTo(SetAndVariant other) {
 			int c = Integer.compare(this.set, other.set);
 			return c != 0 ? c : Integer.compare(this.variant, other.variant);
 		}
 	};
 	
-	public static RawDecodedDeck decode(String code) {
+	public static RawDeck decode(String code) {
 		try (VarIntInputStream inputStream = new VarIntInputStream(Base32.decode(code))) {
 			int version = inputStream.read().intValue();
 			checkVersion(version);
 
-//System.out.println(Bits.hex((byte)version) + " ");
 			Map<RawCardId, Integer> main;
 			Map<RawCardId, Integer> side;
 			if (version == 0x11) {
 				String[] codes = code.split("\\|");
 				main = decode(inputStream, 12);
 				if (codes.length > 1) {
-//System.out.println("side:");
 					try (VarIntInputStream sideInputStream = new VarIntInputStream(Base32.decode(codes[1]))) {
 						sideInputStream.read(); // useless version
-//System.out.print(sideInputStream.read().intValue() + " ");
 						side = decode(sideInputStream, 12);
 					}
 				} else {
@@ -58,12 +55,10 @@ public class DeckCode {
 				}
 			} else {
 				main = decode(inputStream, 12);
-//System.out.println("side:");
 				side = decode(inputStream, 3);
 			}
 
-//System.out.println();
-			return new RawDecodedDeck(main, side);
+			return new RawDeck(main, side);
 		} catch (IOException e) {
 			// Not supposed to happen since close() does nothing
 			e.printStackTrace();
@@ -79,7 +74,6 @@ public class DeckCode {
 				break;
 			}
 			int nbOfSetVariantCombinations = varInt.intValue();
-//System.out.println(" |- {" + (qty >= 10 ? "" : "0") + qty + "}:" + nbOfSetVariantCombinations);
 			for (int i = 0; i < nbOfSetVariantCombinations; i++) {
 				decodeSetVariantCombination(inputStream, map, qty);
 			}
@@ -92,14 +86,9 @@ public class DeckCode {
 		int nbOfCards = inputStream.read().intValue();
 		int set = inputStream.read().intValue();
 		int variant = inputStream.read().intValue();
-//System.out.print(" |  |- [" + nbOfCards + " "  + set + " " + variant + "]=>( ");
 		for (int i = 0; i < nbOfCards; i++) {
-//int id = inputStream.read().intValue();
-//System.out.print(id + " ");
-//map.put(new RawCardId(set, id, variant), quantity);
 			map.put(new RawCardId(set, inputStream.read().intValue(), variant), quantity);
 		}
-//System.out.println(")");
 	}
 
 	private static void checkVersion(int version) {
@@ -111,11 +100,11 @@ public class DeckCode {
 		throw new RuntimeException("Unsupported version : " + Bits.hex(version));
 	}
 
-	public static String encode(RawDecodedDeck rawDecodedDeck) {
+	public static String encode(RawDeck rawDeck) {
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 			outputStream.write(LAST_VERSION_AS_VARINT_BYTES_ARRAY);
-			encode(rawDecodedDeck.getMain(), 12, outputStream);
-			encode(rawDecodedDeck.getSide(), 3, outputStream);
+			encode(rawDeck.getMain(), 12, outputStream);
+			encode(rawDeck.getSide(), 3, outputStream);
 			
 			return Base32.encode(outputStream.toByteArray());
 		} catch (IOException e) {
@@ -143,22 +132,18 @@ public class DeckCode {
 				continue;
 			}
 			
-			Map<SetVariant, List<RawCardId>> groupByMap = rawCardIds.stream().collect(Collectors.groupingBy(id -> new SetVariant(id.getSet(), id.getVariant())));
-			List<SetVariant> setVariants = new ArrayList<>(groupByMap.keySet());
-			Collections.sort(setVariants);
-//System.out.println("{" + i + "} : " + setVariants.size());
-			outputStream.write(new VarInt(setVariants.size()).getBytes());
-			for (SetVariant setVariant : setVariants) {
+			Map<SetAndVariant, List<RawCardId>> groupByMap = rawCardIds.stream().collect(Collectors.groupingBy(id -> new SetAndVariant(id.getSet(), id.getVariant())));
+			List<SetAndVariant> setAndVariants = new ArrayList<>(groupByMap.keySet());
+			setAndVariants.sort(null);
+			outputStream.write(new VarInt(setAndVariants.size()).getBytes());
+			for (SetAndVariant setVariant : setAndVariants) {
 				List<Integer> ids = groupByMap.get(setVariant).stream().map(raw -> raw.getId()).sorted().toList();
-//System.out.print(" |- [" + ids.size() + " " + setVariant.set + " " + setVariant.variant + "]--> ");
-//ids.forEach(id -> System.out.print(id + " "));
 				outputStream.write(new VarInt(ids.size()).getBytes());
 				outputStream.write(new VarInt(setVariant.set).getBytes());
 				outputStream.write(new VarInt(setVariant.variant).getBytes());
 				for (int id : ids) {
 					outputStream.write(new VarInt(id).getBytes());
 				}
-//System.out.println();
 			}
 		}
 	}

@@ -45,40 +45,24 @@ public final class VarInt {
         }
         length = Math.max(1, length);
         int varIntLength = (length * 8 / 7);
-//println("int varIntLength = (bigIntegerTrueLength * 8 / 7) => %d", bigIntegerTrueLength);
         varIntLength += ( bytes[bytes.length - length] >> (8 - (length % 8)) ) == 0 ? 0 : 1;
-//println("0b%s >> %d => 0b%s", bin(bigBytes[bigBytes.length - bigIntegerTrueLength]), 8 - (bigIntegerTrueLength % 8), bin((byte) (bigBytes[bigBytes.length - bigIntegerTrueLength] >> (8 - (bigIntegerTrueLength % 8)))));
         byte[] varBytes = new byte[varIntLength];
 
-//println("bigInteger=%d (%s); bigBytes.length=%d; bigIntegerTrueLength=%d, varIntLength=%d", bigInteger, hex(bigInteger.toByteArray()), bigBytes.length, bigIntegerTrueLength, varIntLength);
         int sourceIndex = Math.max(1, bytes.length) - 1;
         for (int targetIndex = 0; targetIndex < varBytes.length; targetIndex++) {
             int mod = targetIndex % 8;
-//println("[%d/%d] - %d", targetIndex, sourceIndex, mod);
             varBytes[targetIndex] = sourceIndex < 0 ? 0 : (byte) (bytes[sourceIndex] & MASKS[mod]);
-//if (sourceIndex < 0) {
-//println(" |- varBytes[%d] = 0", targetIndex);
-//} else {
-//println(" |- varBytes[%d] = (byte) (0b%s & 0x%02X) => 0b%s", targetIndex, bin(bigBytes[sourceIndex]), mask[mod], bin(varBytes[targetIndex]));
-//}
             varBytes[targetIndex] = (byte) (varBytes[targetIndex] << mod);
-//println(" |- varBytes[%d] = (byte) (varBytes[%d] << %d) => 0b%s", targetIndex, targetIndex, mod, bin(varBytes[targetIndex]));
             varBytes[targetIndex] |= targetIndex == (varBytes.length - 1) ? 0 : (byte) 0x80;
-//println(" |- varBytes[%d] |= targetIndex == (varBytes.length - 1) ? 0 : (byte) 0x80 => 0b%s", targetIndex, bin(varBytes[targetIndex]));
             if (mod != 0) {
             	byte prev = (byte) (bytes[sourceIndex + 1] >> (8 - mod));
-//println(" |- prev = (byte) (0b%s >> (8 - %d)) => 0b%s", bin(bigBytes[sourceIndex + 1]), mod, bin(prev));
             	prev = (byte) (prev & MASKS[7 - mod]);
-//println(" |- prev = (byte) (prev & 0x%02X) => 0b%s", mask[7 - mod], bin(prev));
             	
                 varBytes[targetIndex] |= prev;
-//println(" |- varBytes[%d] |= prev => 0b%s", targetIndex, bin(prev), bin(varBytes[targetIndex]));
             }
-
             sourceIndex = (mod == 7) ? sourceIndex : sourceIndex - 1;
         }
 
-//println(" \\--> %s", hex(varBytes));
         return varBytes;
     }
 
@@ -100,54 +84,6 @@ public final class VarInt {
     	return result;
     }
 
-    /**
-     * Lit les prochains octets comme un <code>VarInt</code>. ie :
-     * Tant que le bit de poid fort est 1 on continue mais on s'arrête dès qu'on a un <code>VarInt</code> complet.
-     *
-     * @param input Un flux d'octets
-     * @return Un <code>VarInt</code> ou <code>null</code> s'il n'a pu être construit.
-     */
-//    @Deprecated
-//    public static VarInt read(ByteArrayInputStream input) {
-//        ByteArrayOutputStream output = new ByteArrayOutputStream();
-//        int i = input.read();
-//
-//        while (i != -1) {
-//            byte b = (byte) (255 & i);
-//            output.write(b);
-//            if ((b & 0x80) == 0x00) {
-//            	break;
-//            }
-//            
-//            i = input.read();
-//        }
-//        
-//        byte[] out = output.toByteArray();
-//        return out.length == 0 ? null : new VarInt(out);
-//    }
-
-    /**
-     * Lit entièrement un flux d'octets et le converti en tableau de <code>VarInt</code>.
-     * 
-     * @param input Un flux d'octets
-     * @return Un tableau de <code>VarInt</code>
-     */
-//    public static VarInt[] readAll(ByteArrayInputStream input) {
-//        List<VarInt> varInts = new ArrayList<>();
-//
-//        VarInt varInt = read(input);
-//        while (varInt != null) {
-//            varInts.add(varInt);
-//            varInt = read(input);
-//        }
-//
-//        return varInts.toArray(VarInt[]::new);
-//    }
-//
-//    public static VarInt[] readAll(byte[] bytes) {
-//    	return readAll(new ByteArrayInputStream(bytes));
-//    }
-    
     public static boolean isValidVarInt(byte[] bytes) {
     	if (bytes == null || bytes.length == 0) {
     		return false;

@@ -1,17 +1,15 @@
 package fr.reeman.tools.riftbound;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DeckCodeTest {
 
 	@Test
 	public void decode() {
-//System.out.println("~ decode ~");
 		decode("CEAAAAAAAAAQCAAB2YAQAAIBAAAVSAABA4AAAYDK2EA5GAOVAHMADXQBAEDQAACTKVPWS5HJAHXQCAQIAAAABXIB4AA6UAPVAGRAFJICUYBACAAB6YAQ", 0);
 		decode("CEAAAAAAAAAQCAAB2YAQAAIBAAAVSAABA4AAAYDK2EA5GAOVAHMADXQBAEDQAACTKVPWS5HJAHXQCAQIAAAABXIB4AA6UAPVAGRAFJICUYBACAAB6YAQ|CEAAAAAAAAAAAAAAAEAQAAPOAEAQCAAA4AAQCAYAABU52APHAE", 8);
 		decode("CIAAAAAAAAAQCAAAA4AACAIAABMQAAILAAAAICIMDMOVOX3AM5UHIAIDAAACO6XYAEAQKAAABX3QDGACUABKIAQAAEBQAAAWDBOQCAQAABMHE", 8);
@@ -22,7 +20,7 @@ public class DeckCodeTest {
 	}
 	
 	private void decode(String code, int sideSize) {
-		RawDecodedDeck deck = DeckCode.decode(code);
+		RawDeck deck = DeckCode.decode(code);
 		deck = deck.noVariantCopy();
 		assertEquals(56, sizeOf(deck.getMain()));
 		assertEquals(sideSize, sizeOf(deck.getSide()));
@@ -32,14 +30,12 @@ public class DeckCodeTest {
 		return map.values().stream().reduce(0, Integer::sum).intValue();
 	}
 	
-	@Test //@Ignore
+	@Test
 	public void encode() {
-//System.out.println("~ encode ~");
 		encode("CIAAAAAAAAAQCAAAA4AACAIAABMQAAILAAAAICIMDMOVOX3AM5UHIAIDAAACO6XYAEAQKAAABX3QDGACUABKIAQAAEBQAAAWDBOQCAQAABMHE");
 		encode("CIAAAAAAAAAQCAABFIAACAIAAHLACAACAQAAAKZN2UA5QAIIAMACCIRTHCNQDIIBVQA3EAIBAEAAB2IBAIBAAAEZAKUQEBADAAWTFRIB3QAQAAAA");
 		// Annie
 		encode("CIAAAAAAAAAAEAIAACTACAIAAEDQAAACAMAAAAYJXAAQEAYAPJ6AGAYAAAFKQAN2AEAQCAABAIBQBBYB5IAQICIAAALRXKQBVMA4CAOKAHGQDEYCSQBAIAABDPAQDSQBZUAQCAIACEBQGAAJ2EA54AIAAAAA");
-		
 	}
 	
 	private void encode(String code) {
