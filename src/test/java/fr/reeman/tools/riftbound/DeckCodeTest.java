@@ -43,4 +43,9 @@ public class DeckCodeTest {
 		DeckCode.decode(actualCode);
 		assertEquals(code, actualCode);
 	}
+	
+	@Test
+	private void newVersin() {
+		String viktor = "CIAAAAAAAEAQAAGWAEAAAAABAEAACWIBA4AAAXK72EA5KAO2AHXQD5IBAEEQAACTMBTXJTQB2IA6OAPJAHXACAIGAAAPMAPWAGEQFIICUQBKMAQBAEAABYABAEBAAADJRIBACAIAAB2A";
+	}
 }

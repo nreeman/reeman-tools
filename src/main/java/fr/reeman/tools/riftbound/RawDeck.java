@@ -1,5 +1,7 @@
 package fr.reeman.tools.riftbound;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +41,14 @@ public class RawDeck {
 	 */
 	//TODO
 	public void printTree(PrintStream out) {
-		Map<Integer, List<RawCardId>> invertedMap = invertMap(main);
+	}
+	
+	public String tree() throws IOException {
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				PrintStream printStream = new PrintStream(outputStream)) {
+			printTree(printStream);
+			return printStream.toString();
+		}
 	}
 	
 	//TODO une méthode générique
