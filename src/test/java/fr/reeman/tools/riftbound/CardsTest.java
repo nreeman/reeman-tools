@@ -3,11 +3,16 @@ package fr.reeman.tools.riftbound;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 import java.util.HashMap;
@@ -56,13 +61,17 @@ public class CardsTest {
 
 	@Test
 	public void pretty() throws FileNotFoundException, IOException {
-		int p = 4;
-		List<String> tokens = List.of("40", "41", "42", "43", "44", "45", "46", "47", "48", "49");
-		for (String token : tokens) {
-			System.out.println(token);
-			String fileName = "/users/nreeman/Downloads/tmp" + token + ".txt";
-			int startIndex = "data:image/jpeg;base64,".length();
-			String fileNameFormat = "/users/nreeman/Downloads/pretty" + p + "/pretty_" + token + "_%03d.jpg";
+		String p = "18";
+		String root = "/users/nreeman/Downloads/";
+		String target = root + "pretty" + p + "/";
+		int startIndex = "data:image/jpeg;base64,".length();
+
+		new File(target).mkdirs();
+		for (int i = 0; i < 8; i++) {
+			String current = p+i;
+			System.out.println(current);
+			String fileName = root + "tmp" + current + ".txt";
+			String fileNameFormat = target + current + "_%03d.jpg";
 			Decoder decoder = Base64.getDecoder();
 			try (FileReader fileReader = new FileReader(fileName);
 					BufferedReader reader = new BufferedReader(fileReader)) {
@@ -71,6 +80,9 @@ public class CardsTest {
 				int count = 0;
 				while (line != null) {
 					count++;
+//if (i == 2) {
+//	System.out.println(count + " - " + line);
+//}
 					byte[] content = decoder.decode(line.substring(startIndex));
 					try (FileOutputStream fileOutputStream = new FileOutputStream(String.format(fileNameFormat, count))) {
 						//System.out.println(String.format(fileNameFormat, count));
@@ -78,6 +90,9 @@ public class CardsTest {
 					}
 					line = reader.readLine();
 				}
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+				throw e;
 			}
 		}
 	}

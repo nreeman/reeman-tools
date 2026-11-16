@@ -1,8 +1,10 @@
 package fr.reeman.tools.comics;
 
-import static fr.reeman.tools.ImmutablePair.pair;
 import static fr.reeman.tools.comics.enums.TPBTitleName.ALIAS_RED_BAND_VOL_1_TPB;
 import static fr.reeman.tools.comics.enums.TPBTitleName.CYCLOPS_VOL_4_TPB;
+import static fr.reeman.tools.comics.enums.TPBTitleName.DAREDEVIL_VOL_9_TPB;
+import static fr.reeman.tools.comics.enums.TPBTitleName.DNX_VOL_1_TPB;
+import static fr.reeman.tools.comics.enums.TPBTitleName.JEAN_GREY_VOL_3_TPB;
 import static fr.reeman.tools.comics.enums.TPBTitleName.MAGIK_AND_COLOSSUS_VOL_1_TPB;
 import static fr.reeman.tools.comics.enums.TPBTitleName.MARVEL_KNIGHTS_PUNISHER_VOL_1_TBP;
 import static fr.reeman.tools.comics.enums.TPBTitleName.PHOENIX_VOL_1_TPB;
@@ -14,7 +16,10 @@ import static fr.reeman.tools.comics.enums.TitleName.ASM;
 import static fr.reeman.tools.comics.enums.TitleName.ASM_VENOM_DEATH_SPIRAL;
 import static fr.reeman.tools.comics.enums.TitleName.ASM_VENOM_DEATH_SPIRAL_DEATH_SPIRAL;
 import static fr.reeman.tools.comics.enums.TitleName.AVENGERS;
+import static fr.reeman.tools.comics.enums.TitleName.AVENGERS_ARMAGEDDON;
 import static fr.reeman.tools.comics.enums.TitleName.CYCLOPS;
+import static fr.reeman.tools.comics.enums.TitleName.DAREDEVIL;
+import static fr.reeman.tools.comics.enums.TitleName.DNX;
 import static fr.reeman.tools.comics.enums.TitleName.EMMA_FROST_THE_WHITE_QUEEN;
 import static fr.reeman.tools.comics.enums.TitleName.EXCEPTIONAL_X_MEN;
 import static fr.reeman.tools.comics.enums.TitleName.IMPERIAL;
@@ -23,11 +28,13 @@ import static fr.reeman.tools.comics.enums.TitleName.IMPERIAL_WAR_EXILES;
 import static fr.reeman.tools.comics.enums.TitleName.IMPERIAL_WAR_IMPERIAL_GUARDIANS;
 import static fr.reeman.tools.comics.enums.TitleName.IMPERIAL_WAR_NOVA_CENTURION;
 import static fr.reeman.tools.comics.enums.TitleName.IMPERIAL_WAR_PLANET_SHE_HULK;
+import static fr.reeman.tools.comics.enums.TitleName.JEAN_GREY;
 import static fr.reeman.tools.comics.enums.TitleName.LONGSHOTS;
 import static fr.reeman.tools.comics.enums.TitleName.MAGIK;
 import static fr.reeman.tools.comics.enums.TitleName.MAGIK_AND_COLOSSUS;
 import static fr.reeman.tools.comics.enums.TitleName.MARVEL_KNIGHTS_PUNISHER;
 import static fr.reeman.tools.comics.enums.TitleName.MARVEL_KNIGHTS_THE_WORLD_TO_COME;
+import static fr.reeman.tools.comics.enums.TitleName.MAXIMUM_X_MEN;
 import static fr.reeman.tools.comics.enums.TitleName.NYX;
 import static fr.reeman.tools.comics.enums.TitleName.PHOENIX;
 import static fr.reeman.tools.comics.enums.TitleName.PSYLOCKE;
@@ -93,7 +100,6 @@ public class Collec {
 	private List<Issue> issues = new ArrayList<>();
 	private List<TPBTitle> tpbTitles = new ArrayList<>();
 	private List<TradePaperback> tradePaperbacks = new ArrayList<>();
-	private List<Issue> watchlist = null;
 	
 
 	public static synchronized Collec getInstance() {
@@ -115,29 +121,28 @@ public class Collec {
 		
 		buildTradePaperbacks();
 		buildFinishedTradePaperbacks();
-		
-		watchlist = getIssues(i -> {
-			return false;
-		});
 	}
 	
-	private void buildActiveTitles() {
-		titles.add(new Title(ALIAS_RED_BAND, 1, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Alias:_Red_Band_Vol_1"));
+	private ImmutablePair<String, Boolean> pair(String string, boolean b) {
+		return new ImmutablePair<String, Boolean>(string, b);
+	}
 
+	private void buildActiveTitles() {
 		titles.add(new Title(ASM, 7, ONGOING, 2025, ACTIVE, "https://marvel.fandom.com/wiki/Amazing_Spider-Man_Vol_7"));
-		titles.add(new Title(ASM_VENOM_DEATH_SPIRAL, 1, ONE_SHOT, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Amazing_Spider-Man/Venom:_Death_Spiral_Vol_1"));
-		titles.add(new Title(ASM_VENOM_DEATH_SPIRAL_DEATH_SPIRAL, 1, ONE_SHOT, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Amazing_Spider-Man/Venom:_Death_Spiral_Body_Count_Vol_1"));
-		titles.add(new Title(AVENGERS, 9, ONGOING, 2023, ACTIVE, "https://marvel.fandom.com/wiki/Avengers_Vol_9"));
+		titles.add(new Title(AVENGERS, 10, ONGOING, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Avengers_Vol_10"));
+		titles.add(new Title(AVENGERS_ARMAGEDDON, 1, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Avengers:_Armageddon_Vol_1"));
 		
 		titles.add(new Title(CYCLOPS, 4, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Cyclops_Vol_4"));
+
+		titles.add(new Title(DAREDEVIL, 9, ONGOING, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Daredevil_Vol_9"));
+		titles.add(new Title(DNX, 1, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/DNX_Vol_1"));
+		
+		titles.add(new Title(JEAN_GREY, 3, ONGOING, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Jean_Grey_Vol_3"));
 
 		titles.add(new Title(MAGIK_AND_COLOSSUS, 1, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Magik_%26_Colossus_Vol_1"));
 		titles.add(new Title(MARVEL_KNIGHTS_PUNISHER, 1, LIMITED, 2025, ACTIVE, "https://marvel.fandom.com/wiki/Marvel_Knights:_Punisher_Vol_1"));
 		titles.add(new Title(MARVEL_KNIGHTS_THE_WORLD_TO_COME, 1, LIMITED, 2025, ACTIVE, "https://marvel.fandom.com/wiki/Marvel_Knights:_The_World_To_Come_Vol_1"));
-
-		titles.add(new Title(ROGUE, 4, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Rogue_Vol_4"));
-		
-		titles.add(new Title(STORM_EARTH_S_MIGHTIEST_MUTANT, 1, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Storm:_Earth%27s_Mightiest_Mutant_Vol_1"));
+		titles.add(new Title(MAXIMUM_X_MEN, 1, ONGOING, 2025, ACTIVE, "https://marvel.fandom.com/wiki/Maximum_X-Men_Vol_1"));
 
 		titles.add(new Title(UNCANNY_X_MEN, 6, ONGOING, 2024, ACTIVE, "https://marvel.fandom.com/wiki/Uncanny_X-Men_Vol_6"));
 		titles.add(new Title(UNCANNY_X_MEN_ANNUAL, 6, ANNUAL, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Uncanny_X-Men_Annual_Vol_6"));
@@ -150,99 +155,107 @@ public class Collec {
 	}
 
 	private void buildActiveIssues() {
-		link(ALIAS_RED_BAND, 1, List.of(
-				pair("2026-03-11", false), pair("2026-04-15", false), pair("2026-05-20", false)
-			)
-		);
 		link(ASM, 7, List.of(
 				pair("2025-04-09", true), pair("2025-04-23", true), pair("2025-05-07", true), pair("2025-05-21", true), pair("2025-06-04", true), //  1- 5
 				pair("2025-06-18", true), pair("2025-07-02", true), pair("2025-07-23", true), pair("2025-08-06", true), pair("2025-08-20", true), //  6-10
 				pair("2025-09-03", true), pair("2025-09-17", true), pair("2025-10-01", true), pair("2025-10-15", true), pair("2025-11-05", true), // 11-15
 				pair("2025-11-19", true), pair("2025-12-10", true), pair("2025-12-24", true), pair("2026-01-07", true), pair("2026-01-21", true), // 16-20
-				pair("2026-02-04", true), pair("2026-02-18", true), pair("2026-03-04", true), pair("2026-03-18", false), pair("2026-03-25", false), // 21-25
-				pair("2026-04-08", false), pair("2026-04-22", false),pair("2026-05-06", false), pair("2026-05-20", false)
+				pair("2026-02-04", true), pair("2026-02-18", true), pair("2026-03-04", true), pair("2026-03-18", true), pair("2026-03-25", true), // 21-25
+				pair("2026-04-08", true), pair("2026-04-22", true), pair("2026-05-06", true), pair("2026-05-20", true), pair("2026-06-03", true), // 26-30
+				pair("2026-06-17", true), pair("2026-07-01", true), pair("2026-07-22", true), pair("2026-08-05", true), pair("2026-08-26", true)  // 31-35
 			)
 		);
-		link(ASM_VENOM_DEATH_SPIRAL, 1, List.of(pair("2026-02-25", true)) );
-		link(ASM_VENOM_DEATH_SPIRAL_DEATH_SPIRAL, 1, List.of(pair("2026-05-13", false)) );
-
-		link(CYCLOPS, 4, List.of(
-				pair("2026-02-11", false), pair("2026-03-18", false), pair("2026-04-22", false), pair("2026-05-06", false)
-			)
+		link(ASM, 7, List.of(
+				pair("2026-09-30", true), // 1000
+				pair("2026-10-14", true), pair("2026-10-28", true), pair("2026-11-11", false), pair("2026-11-25", false), pair("2026-12-09", false), // 1001-1005
+				pair("2026-12-23", false), pair("2027-01-06", false), pair("2027-01-20", false), pair("2027-02-03", false) // 1006-1009
+			), 999
 		);
-
-		link(MAGIK_AND_COLOSSUS, 1, List.of(
-				pair("2026-02-04", false), pair("2026-03-11", false), pair("2026-04-15", false), pair("2026-05-13", false)
-			)
-		);
-		link(MARVEL_KNIGHTS_PUNISHER, 1, List.of(
-				pair("2025-10-08", false), pair("2025-11-26", false), pair("2025-12-10", false), pair("2026-03-25", false)
-			)
-		);
-		link(MARVEL_KNIGHTS_THE_WORLD_TO_COME, 1, List.of(
-				pair("2025-06-04", true), pair("2025-07-16", true), pair("2025-10-08", true), pair("2025-11-12", true), pair("2025-12-31", true),
-				pair("2026-03-25", false)
+		link(AVENGERS, 10, List.of(
+				pair("2026-11-04", true), pair("2026-12-16", false), pair("2027-01-27", false), pair("2027-02-10", false) //  1- 4
 			)
 		);
 
-		link(ROGUE, 4, List.of(
-				pair("2026-01-21", true), pair("2026-02-25", true), pair("2026-03-25", false), pair("2026-04-22", false), pair("2026-05-20", false)
+		link(DNX, 1, List.of(
+				pair("2026-09-16", false), pair("2026-09-30", false), pair("2026-10-14", false), pair("2026-11-04", false), pair("2026-11-18", false) //  1- 5
 			)
 		);
-		link(STORM_EARTH_S_MIGHTIEST_MUTANT, 1, List.of(
-				pair("2026-02-04", false), pair("2026-03-11", false), pair("2026-04-15", false), pair("2026-05-06", false)
+
+		link(JEAN_GREY, 3, List.of(
+				pair("2026-11-25", false), pair("2026-12-30", false), pair("2027-01-27", false) //  1- 3
+			)
+		);
+		
+		link(MAXIMUM_X_MEN, 1, List.of(
+				pair("2026-12-02", false), pair("2027-01-13", false) //  1-  2
 			)
 		);
 		
 		link(UNCANNY_X_MEN, 6, List.of(
-				pair("2024-08-07", true), pair("2024-09-11", true), pair("2024-09-25", true), pair("2024-10-16", true), pair("2024-11-13", true),
-				pair("2024-11-27", true), pair("2024-12-11", true), pair("2025-01-08", true), pair("2025-01-22", true), pair("2025-02-19", true),
-				pair("2025-03-05", true), pair("2025-03-26", true), pair("2025-04-09", true), pair("2025-05-14", true), pair("2025-05-28", true),
-				pair("2025-06-25", true), pair("2025-07-09", true), pair("2025-07-23", true), pair("2025-08-06", true), pair("2025-09-03", true),
-				pair("2025-09-17", true), pair("2026-01-14", true), pair("2026-02-04", true), pair("2026-02-18", true), pair("2026-03-25", false),
-				pair("2026-04-08", false), pair("2026-04-29", false), pair("2026-05-13", false)
+				pair("2024-08-07", true), pair("2024-09-11", true), pair("2024-09-25", true), pair("2024-10-16", true), pair("2024-11-13", true), //  1- 5
+				pair("2024-11-27", true), pair("2024-12-11", true), pair("2025-01-08", true), pair("2025-01-22", true), pair("2025-02-19", true), //  6-10
+				pair("2025-03-05", true), pair("2025-03-26", true), pair("2025-04-09", true), pair("2025-05-14", true), pair("2025-05-28", true), // 11-15
+				pair("2025-06-25", true), pair("2025-07-09", true), pair("2025-07-23", true), pair("2025-08-06", true), pair("2025-09-03", true), // 16-20
+				pair("2025-09-17", true), pair("2026-01-14", true), pair("2026-02-04", true), pair("2026-02-18", true), pair("2026-03-25", true), // 21-25
+				pair("2026-04-08", true), pair("2026-04-29", true), pair("2026-05-13", true), pair("2026-06-03", true), pair("2026-06-17", true), // 26-30
+				pair("2026-07-08", true), pair("2026-07-22", true), pair("2026-08-05", true), pair("2026-08-19", true), pair("2026-09-16", true), // 31-35
+				pair("2026-09-30", true), pair("2026-10-21", true), pair("2026-11-04", true), pair("2026-11-25", false), pair("2026-12-16", false), // 36-40
+				pair("2027-01-06", false), pair("2027-01-27", false) // 41-42
 			)
 		);
-		link(UNCANNY_X_MEN_ANNUAL, 6, List.of(pair("2026-04-01", false)));
+		link(UNCANNY_X_MEN_ANNUAL, 6, List.of(pair("2026-04-08", true)));
 		
 		link(TitleName.VENOM, 6, List.of(
-				pair("2026-03-11", true), pair("2026-04-01", false), pair("2026-04-15", false)
+				pair("2026-03-11", true), pair("2026-04-01", true), pair("2026-04-15", true), pair("2026-05-20", true) // 255-258
 			), 254
 		);
 		link(X_MEN, 7, List.of(
-				pair("2024-07-10", true), pair("2024-08-14", true), pair("2024-08-28", true), pair("2024-09-18", true), pair("2024-10-02", true),
-				pair("2024-10-23", true), pair("2024-11-06", true), pair("2024-12-04", true), pair("2024-12-25", true), pair("2025-01-29", true),
-				pair("2025-02-12", true), pair("2025-02-26", true), pair("2025-03-12", true), pair("2025-04-02", true), pair("2025-04-23", true),
-				pair("2025-05-07", true), pair("2025-06-04", true), pair("2025-06-18", true), pair("2025-07-02", true), pair("2025-08-13", true),
-				pair("2025-08-27", true), pair("2025-01-21", true), pair("2026-01-07", true), pair("2026-01-21", true), pair("2026-02-18", true),
-				pair("2026-03-04", true), pair("2026-03-18", false), pair("2026-04-01", false), pair("2026-05-06", false), pair("2026-05-27", false)
+				pair("2024-07-10", true), pair("2024-08-14", true), pair("2024-08-28", true), pair("2024-09-18", true), pair("2024-10-02", true), //  1- 5
+				pair("2024-10-23", true), pair("2024-11-06", true), pair("2024-12-04", true), pair("2024-12-25", true), pair("2025-01-29", true), //  6-10
+				pair("2025-02-12", true), pair("2025-02-26", true), pair("2025-03-12", true), pair("2025-04-02", true), pair("2025-04-23", true), // 11-15
+				pair("2025-05-07", true), pair("2025-06-04", true), pair("2025-06-18", true), pair("2025-07-02", true), pair("2025-08-13", true), // 16-20
+				pair("2025-08-27", true), pair("2025-01-21", true), pair("2026-01-07", true), pair("2026-01-21", true), pair("2026-02-18", true), // 21-25
+				pair("2026-03-04", true), pair("2026-03-18", true), pair("2026-04-01", true), pair("2026-05-06", true), pair("2026-05-27", true), // 26-30
+				pair("2026-06-10", true), pair("2026-06-24", true), pair("2026-07-15", true), pair("2026-07-29", true), pair("2026-08-12", true), // 31-35
+				pair("2026-08-26", true), pair("2026-09-16", true), pair("2026-09-30", true), pair("2026-10-14", true), pair("2026-10-28", true), // 36-40
+				pair("2026-11-11", false), pair("2026-12-09", false), pair("2026-12-23", false), pair("2027-01-13", false), pair("2027-02-03", false) // 41-45
 			)
 		);
 		link(X_MEN_ANNUAL, 6, List.of(pair("2026-03-04", true)));
 		link(X_MEN_UNITED, 1, List.of(
-				pair("2026-03-11", true), pair("2026-04-15", false), pair("2026-05-20", false)
+				pair("2026-03-11", true), pair("2026-04-15", true), pair("2026-05-20", true), pair("2026-06-17", true), pair("2026-07-01", true), //  1- 5
+				pair("2026-08-12", true), pair("2026-09-30", true), pair("2026-10-21", true), pair("2026-11-11", false), pair("2026-12-02", false), //  6-10
+				pair("2027-01-13", false) // 11
 			)
 		);
 	}
 	
 	private void buildTPBTitles() {
-		tpbTitles.add(new TPBTitle(ALIAS_RED_BAND_VOL_1_TPB, null, getTitle(ALIAS_RED_BAND, 1), ACTIVE));
+		tpbTitles.add(new TPBTitle(ALIAS_RED_BAND_VOL_1_TPB, "https://www.pulps.fr/previews-item/alias_red_band_deal_with_the_devil_559847", getTitle(ALIAS_RED_BAND, 1), ACTIVE));
 		
-		tpbTitles.add(new TPBTitle(CYCLOPS_VOL_4_TPB, null, getTitle(CYCLOPS, 4), ACTIVE));
-		
-		tpbTitles.add(new TPBTitle(MAGIK_AND_COLOSSUS_VOL_1_TPB, null, getTitle(MAGIK_AND_COLOSSUS, 1), ACTIVE));
-		tpbTitles.add(new TPBTitle(MARVEL_KNIGHTS_PUNISHER_VOL_1_TBP, null, getTitle(MARVEL_KNIGHTS_PUNISHER, 1), ACTIVE));
+		tpbTitles.add(new TPBTitle(CYCLOPS_VOL_4_TPB, "https://www.pulps.fr/item/cyclops_seeing_red_552538", getTitle(CYCLOPS, 4), ACTIVE));
 
-		tpbTitles.add(new TPBTitle(STORM_EARTH_S_MIGHTIEST_MUTANT_VOL_1_TPB, null, getTitle(STORM_EARTH_S_MIGHTIEST_MUTANT, 1), ACTIVE));
+		tpbTitles.add(new TPBTitle(DAREDEVIL_VOL_9_TPB, "https://www.pulps.fr/previews-item/daredevil_vol_1_tomorrows_devil_559837", getTitle(DAREDEVIL, 9), ACTIVE));
+		tpbTitles.add(new TPBTitle(DNX_VOL_1_TPB, null, getTitle(DNX, 1), ACTIVE));
+
+		tpbTitles.add(new TPBTitle(JEAN_GREY_VOL_3_TPB, null, getTitle(JEAN_GREY, 3), ACTIVE));
+
+		tpbTitles.add(new TPBTitle(MAGIK_AND_COLOSSUS_VOL_1_TPB, "https://marvel.fandom.com/wiki/Magik_and_Colossus:_Bound_by_Blood_TPB_Vol_1", getTitle(MAGIK_AND_COLOSSUS, 1), ACTIVE));
+		tpbTitles.add(new TPBTitle(MARVEL_KNIGHTS_PUNISHER_VOL_1_TBP, "https://marvel.fandom.com/wiki/Marvel_Knights:_Punisher_TPB_Vol_1", getTitle(MARVEL_KNIGHTS_PUNISHER, 1), ACTIVE));
+
+		tpbTitles.add(new TPBTitle(STORM_EARTH_S_MIGHTIEST_MUTANT_VOL_1_TPB, "https://www.pulps.fr/item/storm_earths_mightiest_mutant_deaths_machinations_552544", getTitle(STORM_EARTH_S_MIGHTIEST_MUTANT, 1), ACTIVE));
 	}
 	
 	private void buildTradePaperbacks() {
-		tpb(getTpbTitle(ALIAS_RED_BAND_VOL_1_TPB), 1, null, "Unknown", "unknown url", false, 1, 3);
-		tpb(getTpbTitle(CYCLOPS_VOL_4_TPB), 1, null, "Unknown", "unknown url", false, 1, 3);
+		tpb(getTpbTitle(ALIAS_RED_BAND_VOL_1_TPB), 1, "2026-12-23", "Alias: Red Band - Deal with the Devil", "https://www.pulps.fr/previews-item/alias_red_band_deal_with_the_devil_559847", false, 1, 5);
+		tpb(getTpbTitle(CYCLOPS_VOL_4_TPB), 1, "2026-11-11", "Cyclops: Seeing Red", "https://www.pulps.fr/item/cyclops_seeing_red_552538", true, 1, 5);
+		tpb(getTpbTitle(DAREDEVIL_VOL_9_TPB), 1, "2026-12-23", "Daredevil Vol. 9: Tomorrow's Devil", "https://www.pulps.fr/previews-item/daredevil_vol_1_tomorrows_devil_559837", false, 1, 5);
+		tpb(getTpbTitle(DNX_VOL_1_TPB), 1, null, null, null, false, 1, 5);
+		tpb(getTpbTitle(JEAN_GREY_VOL_3_TPB), 1, null, null, null, false, 1, 3);
 
-		tpb(getTpbTitle(MAGIK_AND_COLOSSUS_VOL_1_TPB), 1, null, "Unknown", "unknown url", false, 1, 4);
-		tpb(getTpbTitle(MARVEL_KNIGHTS_PUNISHER_VOL_1_TBP), 1, null, "Unknown", "unknown url", false, 1, 4);
-		tpb(getTpbTitle(STORM_EARTH_S_MIGHTIEST_MUTANT_VOL_1_TPB), 1, null, "Unknown", "unknown url", false, 1, 4);
+		tpb(getTpbTitle(MAGIK_AND_COLOSSUS_VOL_1_TPB), 1, "2026-11-04", "Magik & Colossus: Bound by Blood ", "https://marvel.fandom.com/wiki/Magik_and_Colossus:_Bound_by_Blood_TPB_Vol_1_1", true, 1, 5);
+		tpb(getTpbTitle(MARVEL_KNIGHTS_PUNISHER_VOL_1_TBP), 1, "2026-09-30", "", "https://marvel.fandom.com/wiki/Marvel_Knights:_Punisher_TPB_Vol_1_1", true, 1, 4);
+		tpb(getTpbTitle(STORM_EARTH_S_MIGHTIEST_MUTANT_VOL_1_TPB), 1, "2026-11-11", "Storm: Earth's Mightiest Mutant - Death's Machinations", "https://www.pulps.fr/item/storm_earths_mightiest_mutant_deaths_machinations_552544", true, 1, 5);
 	}
 
 	private void link(TitleName titleName, int volume, List<ImmutablePair<String, Boolean>> pairs) {
@@ -319,7 +332,11 @@ public class Collec {
 	}
 
 	private void buildFinishedTitles() {
+		titles.add(new Title(ALIAS_RED_BAND, 1, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Alias:_Red_Band_Vol_1"));
 		titles.add(new Title(ASM, 6, ONGOING, 2022, FINISHED, "https://marvel.fandom.com/wiki/Amazing_Spider-Man_Vol_6"));
+		titles.add(new Title(ASM_VENOM_DEATH_SPIRAL, 1, ONE_SHOT, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Amazing_Spider-Man/Venom:_Death_Spiral_Vol_1"));
+		titles.add(new Title(ASM_VENOM_DEATH_SPIRAL_DEATH_SPIRAL, 1, ONE_SHOT, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Amazing_Spider-Man/Venom:_Death_Spiral_Body_Count_Vol_1"));
+		titles.add(new Title(AVENGERS, 9, ONGOING, 2023, FINISHED, "https://marvel.fandom.com/wiki/Avengers_Vol_9"));
 
 		titles.add(new Title(EMMA_FROST_THE_WHITE_QUEEN, 1, LIMITED, 2025, FINISHED, "https://marvel.fandom.com/wiki/Emma_Frost:_The_White_Queen_Vol_1"));
 		titles.add(new Title(EXCEPTIONAL_X_MEN, 1, ONGOING, 2024, FINISHED, "https://marvel.fandom.com/wiki/Exceptional_X-Men_Vol_1"));
@@ -340,9 +357,11 @@ public class Collec {
 		titles.add(new Title(PHOENIX, 1, ONGOING, 2024, FINISHED, "https://marvel.fandom.com/wiki/Phoenix_Vol_1"));
 		titles.add(new Title(PSYLOCKE, 2, ONGOING, 2025, FINISHED, "https://marvel.fandom.com/wiki/Psylocke_Vol_2"));
 		
+		titles.add(new Title(ROGUE, 4, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Rogue_Vol_4"));
 		titles.add(new Title(ROGUE_STORM, 1, LIMITED, 2025, FINISHED, "https://marvel.fandom.com/wiki/Rogue_Storm_Vol_1"));
-
+		
 		titles.add(new Title(STORM, 5, ONGOING, 2024, FINISHED, "https://marvel.fandom.com/wiki/Storm_Vol_5"));
+		titles.add(new Title(STORM_EARTH_S_MIGHTIEST_MUTANT, 1, LIMITED, 2026, ACTIVE, "https://marvel.fandom.com/wiki/Storm:_Earth%27s_Mightiest_Mutant_Vol_1"));
 		titles.add(new Title(STORM_LIFEDREAM, 1, ONE_SHOT, 2025, FINISHED, "https://marvel.fandom.com/wiki/Storm:_Lifedream_Vol_1"));
 
 		titles.add(new Title(X_FACTOR, 5, ONGOING, 2024, FINISHED, "https://marvel.fandom.com/wiki/X-Factor_Vol_5"));
@@ -355,17 +374,37 @@ public class Collec {
 	}
 
 	private void buildFinishedIssues() {
+		link(ALIAS_RED_BAND, 1, List.of(
+				pair("2026-03-11", false), pair("2026-04-15", false), pair("2026-05-20", false), pair("2026-06-10", false), pair("2026-07-29", false)
+			)
+		);
 		link(ASM, 6, List.of(
 				pair("2024-11-13", true), pair("2024-11-27", true), pair("2024-12-11", true), pair("2024-12-25", true), pair("2025-01-08", true),
 				pair("2025-01-22", true), pair("2025-02-12", true), pair("2025-02-19", true), pair("2025-03-12", true), pair("2025-03-26", true)
 			), 60
 		);
+		link(ASM_VENOM_DEATH_SPIRAL, 1, List.of(pair("2026-02-25", true)) );
+		link(ASM_VENOM_DEATH_SPIRAL_DEATH_SPIRAL, 1, List.of(pair("2026-05-13", true)) );
 		link(AVENGERS, 9, List.of(
 				pair("2024-08-07", true), pair("2024-09-18", true), pair("2024-10-23", true), pair("2025-11-06", true), pair("2025-12-04", true),
 				pair("2025-01-01", true), pair("2025-02-05", true), pair("2025-03-19", true), pair("2025-04-23", true), pair("2025-05-28", true),
 				pair("2025-06-18", true), pair("2025-07-02", true), pair("2025-08-27", true), pair("2025-09-03", true), pair("2025-10-08", true),
 				pair("2025-11-05", true), pair("2025-12-17", true), pair("2026-01-14", true), pair("2026-02-04", true), pair("2026-03-04", true)
 			), 16
+		);
+		link(AVENGERS_ARMAGEDDON, 1, List.of(
+				pair("2026-06-10", true), pair("2026-07-15", true), pair("2026-08-19", true), pair("2026-09-16", true), pair("2026-10-21", true)
+			)
+		);
+
+		link(CYCLOPS, 4, List.of(
+				pair("2026-02-11", false), pair("2026-03-18", false), pair("2026-04-22", false), pair("2026-05-06", false), pair("2026-06-03", false)
+			)
+		);
+
+		link(DAREDEVIL, 9, List.of(
+				pair("2026-04-01", false), pair("2026-05-06", false), pair("2026-06-10", false), pair("2026-07-08", false), pair("2026-08-12", false)
+			)
 		);
 
 		link(EMMA_FROST_THE_WHITE_QUEEN, 1, List.of(
@@ -400,6 +439,20 @@ public class Collec {
 			)
 		);
 
+		link(MAGIK_AND_COLOSSUS, 1, List.of(
+				pair("2026-02-04", false), pair("2026-03-11", false), pair("2026-04-15", false), pair("2026-05-13", false), pair("2026-06-17", false)
+			)
+		);
+		link(MARVEL_KNIGHTS_PUNISHER, 1, List.of(
+				pair("2025-10-08", false), pair("2025-11-26", false), pair("2025-12-10", false), pair("2026-03-25", false)
+			)
+		);
+		link(MARVEL_KNIGHTS_THE_WORLD_TO_COME, 1, List.of(
+				pair("2025-06-04", true), pair("2025-07-16", true), pair("2025-10-08", true), pair("2025-11-12", true), pair("2025-12-31", true),
+				pair("2026-09-02", true)
+			)
+		);
+
 		link(NYX, 2, List.of( pair("2025-03-05", true) ), 8);
 
 		link(PHOENIX, 1, List.of(
@@ -414,6 +467,10 @@ public class Collec {
 			)
 		);
 
+		link(ROGUE, 4, List.of(
+				pair("2026-01-21", true), pair("2026-02-25", true), pair("2026-03-25", true), pair("2026-04-22", true), pair("2026-05-20", true)
+			)
+		);
 		link(ROGUE_STORM, 1, List.of(
 				pair("2025-10-15", true), pair("2025-11-12", true), pair("2025-12-17", true)
 			)
@@ -423,6 +480,10 @@ public class Collec {
 				pair("2024-10-02", true), pair("2024-11-20", true), pair("2024-12-11", true), pair("2025-01-15", true), pair("2025-02-19", true),
 				pair("2025-03-05", true), pair("2025-04-09", true), pair("2025-05-07", true), pair("2025-06-04", true), pair("2025-07-23", true),
 				pair("2025-08-06", true), pair("2025-09-24", true)
+			)
+		);
+		link(STORM_EARTH_S_MIGHTIEST_MUTANT, 1, List.of(
+				pair("2026-02-04", false), pair("2026-03-11", false), pair("2026-04-15", false), pair("2026-05-06", false), pair("2026-06-03", false)
 			)
 		);
 

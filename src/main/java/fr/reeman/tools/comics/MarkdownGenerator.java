@@ -16,6 +16,11 @@ public class MarkdownGenerator {
 	public final static String HEADER = """
 			# Comics
 			
+			## Commandes
+			
+			- [ ] 2026-12-23 (**106946**) - Alias: Red Band - Deal with the Devil
+			- [ ] 2026-12-23 (**106945**) - Daredevil Vol. 1: Tomorrow's Devil _PREVIEW_
+			
 			""";
 
 	public final static String FOOTER = """
@@ -23,6 +28,8 @@ public class MarkdownGenerator {
 			
 			- [2026 Event Debuts](https://marvel.fandom.com/wiki/Category:2026_Event_Debuts)
 				- [Shadows of Tomorrow](https://marvel.fandom.com/wiki/Shadows_of_Tomorrow)
+				- [DNX](https://marvel.fandom.com/wiki/DNX)
+				- [Armageddon (Event)](https://marvel.fandom.com/wiki/Armageddon_(Event))
 			- [2025 Event Debuts](https://marvel.fandom.com/wiki/Category:2025_Event_Debuts)
 				- [Age of Revelation](https://marvel.fandom.com/wiki/Age_of_Revelation)
 				- [Imperial](https://marvel.fandom.com/wiki/Imperial)

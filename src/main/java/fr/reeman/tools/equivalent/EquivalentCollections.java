@@ -27,7 +27,7 @@ import lombok.NonNull;
 /**
  * Ensemble de méthodes pour manipuler des collections d'objets différents mais équivalents. 
  */
-public class EquivalentCollections {
+public final class EquivalentCollections {
 
 	/**
 	 * 

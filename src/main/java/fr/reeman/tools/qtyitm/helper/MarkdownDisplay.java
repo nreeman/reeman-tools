@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import fr.reeman.tools.ConsoleColors;
-import fr.reeman.tools.Shortcuts;
 import fr.reeman.tools.SuperStringBuffer;
 import fr.reeman.tools.qtyitm.Comparaison;
 import fr.reeman.tools.qtyitm.Item;
@@ -32,7 +31,7 @@ public class MarkdownDisplay extends Display {
 	private boolean consoleColor;
 	@Builder.Default private boolean intersection = true;
 	@Builder.Default private String intersectionZero = "";
-	private boolean union = false;
+	@Builder.Default private boolean union = false;
 
 	@Override
 	public String generate(Comparaison comparaison) {
@@ -60,6 +59,7 @@ public class MarkdownDisplay extends Display {
 		if (intersection) {
 			ssb.append(" %" + intersectionsMaxLength + "s |", intersectionsSum);
 		}
+		// En-tête union
 		if (union) {
 			ssb.append(" %" + unionsMaxLength + "s |", unionsSum);
 		}

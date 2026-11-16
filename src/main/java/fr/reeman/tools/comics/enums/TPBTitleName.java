@@ -11,6 +11,11 @@ public enum TPBTitleName {
 	
 	CYCLOPS_VOL_4_TPB("Cyclops TPB"),
 
+	DAREDEVIL_VOL_9_TPB("Daredevil TPB"),
+	DNX_VOL_1_TPB("DNX_TPB"),
+
+	JEAN_GREY_VOL_3_TPB("Jean Grey TPB"),
+	
 	MAGIK_AND_COLOSSUS_VOL_1_TPB("Magik & Colossus TPB"),
 	MARVEL_KNIGHTS_PUNISHER_VOL_1_TBP("Marvel Knights: Punisher TBP"),
 	

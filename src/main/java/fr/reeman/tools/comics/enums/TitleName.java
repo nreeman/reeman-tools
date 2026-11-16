@@ -12,8 +12,12 @@ public enum TitleName {
 	ASM_VENOM_DEATH_SPIRAL("Amazing Spider-Man/Venom: Death Spiral"),
 	ASM_VENOM_DEATH_SPIRAL_DEATH_SPIRAL("Amazing Spider-Man/Venom: Death Spiral Body Count"),
 	AVENGERS("Avengers"),
+	AVENGERS_ARMAGEDDON("Avengers: Armageddon"),
 	
 	CYCLOPS("Cyclops"),
+	
+	DAREDEVIL("Daredevil"),
+	DNX("DNX"),
 
 	EMMA_FROST_THE_WHITE_QUEEN("Emma Frost: The White Queen"),
 	EXCEPTIONAL_X_MEN("Exceptional X-Men"),
@@ -24,6 +28,8 @@ public enum TitleName {
 	IMPERIAL_WAR_IMPERIAL_GUARDIANS("Imperial War: Imperial Guardians"),
 	IMPERIAL_WAR_NOVA_CENTURION("Imperial War: Nova - Centurion"),
 	IMPERIAL_WAR_PLANET_SHE_HULK("Imperial War: Planet She-Hulk"),
+	
+	JEAN_GREY("Jean Grey"),
 
 	LONGSHOTS("Longshots"),
 	
@@ -31,6 +37,7 @@ public enum TitleName {
 	MAGIK_AND_COLOSSUS("Magik & Colossus"),
 	MARVEL_KNIGHTS_PUNISHER("Marvel Knights: Punisher"),
 	MARVEL_KNIGHTS_THE_WORLD_TO_COME("Marvel Knights: The World To Come"),
+	MAXIMUM_X_MEN("Maximum X-Men"),
 
 	NYX("NYX"),
 	

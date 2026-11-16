@@ -72,7 +72,7 @@ public class QuantityItemSet implements Set<QuantityItem> {
 	
 	public boolean add(int quantity, Item item) {
 		if (quantity < 0) {
-			throw new UnsupportedOperationException("Quantity cannot be increased with a negative value.");
+			throw new UnsupportedOperationException("Quantity cannot be increased by a negative value.");
 		}
 
 		QuantityItem quantityItem = items.get(item);
