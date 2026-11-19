@@ -167,7 +167,7 @@ public class Collec {
 		);
 		link(ASM, 7, List.of(
 				pair("2026-09-30", true), // 1000
-				pair("2026-10-14", true), pair("2026-10-28", true), pair("2026-11-11", false), pair("2026-11-25", false), pair("2026-12-09", false), // 1001-1005
+				pair("2026-10-14", true), pair("2026-10-28", true), pair("2026-11-11", true), pair("2026-11-25", false), pair("2026-12-09", false), // 1001-1005
 				pair("2026-12-23", false), pair("2027-01-06", false), pair("2027-01-20", false), pair("2027-02-03", false) // 1006-1009
 			), 999
 		);
@@ -187,7 +187,7 @@ public class Collec {
 		);
 		
 		link(MAXIMUM_X_MEN, 1, List.of(
-				pair("2026-12-02", false), pair("2027-01-13", false) //  1-  2
+				pair("2026-12-02", false), pair("2027-01-13", false), pair("2027-02-17", false) //  1-  3
 			)
 		);
 		
@@ -200,7 +200,7 @@ public class Collec {
 				pair("2026-04-08", true), pair("2026-04-29", true), pair("2026-05-13", true), pair("2026-06-03", true), pair("2026-06-17", true), // 26-30
 				pair("2026-07-08", true), pair("2026-07-22", true), pair("2026-08-05", true), pair("2026-08-19", true), pair("2026-09-16", true), // 31-35
 				pair("2026-09-30", true), pair("2026-10-21", true), pair("2026-11-04", true), pair("2026-11-25", false), pair("2026-12-16", false), // 36-40
-				pair("2027-01-06", false), pair("2027-01-27", false) // 41-42
+				pair("2027-01-06", false), pair("2027-01-27", false), pair("2027-02-10", false) // 41-43
 			)
 		);
 		link(UNCANNY_X_MEN_ANNUAL, 6, List.of(pair("2026-04-08", true)));
@@ -218,13 +218,14 @@ public class Collec {
 				pair("2026-03-04", true), pair("2026-03-18", true), pair("2026-04-01", true), pair("2026-05-06", true), pair("2026-05-27", true), // 26-30
 				pair("2026-06-10", true), pair("2026-06-24", true), pair("2026-07-15", true), pair("2026-07-29", true), pair("2026-08-12", true), // 31-35
 				pair("2026-08-26", true), pair("2026-09-16", true), pair("2026-09-30", true), pair("2026-10-14", true), pair("2026-10-28", true), // 36-40
-				pair("2026-11-11", false), pair("2026-12-09", false), pair("2026-12-23", false), pair("2027-01-13", false), pair("2027-02-03", false) // 41-45
+				pair("2026-11-11", true), pair("2026-12-09", false), pair("2026-12-23", false), pair("2027-01-13", false), pair("2027-02-03", false), // 41-45
+				pair("2027-02-24", false) // 46
 			)
 		);
 		link(X_MEN_ANNUAL, 6, List.of(pair("2026-03-04", true)));
 		link(X_MEN_UNITED, 1, List.of(
 				pair("2026-03-11", true), pair("2026-04-15", true), pair("2026-05-20", true), pair("2026-06-17", true), pair("2026-07-01", true), //  1- 5
-				pair("2026-08-12", true), pair("2026-09-30", true), pair("2026-10-21", true), pair("2026-11-11", false), pair("2026-12-02", false), //  6-10
+				pair("2026-08-12", true), pair("2026-09-30", true), pair("2026-10-21", true), pair("2026-11-11", true), pair("2026-12-02", false), //  6-10
 				pair("2027-01-13", false) // 11
 			)
 		);
